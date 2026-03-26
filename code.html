@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Case Study Detail View</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#06cee0",
+                        "background-light": "#f9fafa",
+                        "background-dark": "#17191c",
+                        "surface-dark": "#1E2226",
+                        "surface-dark-highlight": "#252A2F",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "mono": ["monospace"] // Fallback for tech tags
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #17191c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3339;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06cee0;
+        }
+        .glass-nav {
+            background: rgba(23, 25, 28, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .diagram-pattern {
+            background-image: radial-gradient(#374151 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-gray-300 font-display antialiased overflow-x-hidden selection:bg-primary selection:text-background-dark">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-white/5 transition-all duration-300">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-xl">terminal</span>
+</div>
+<h2 class="text-white text-lg font-bold tracking-tight">ALEX<span class="text-primary">DEV</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+                    Projects Gallery
+                </a>
+</nav>
+<div class="flex items-center gap-4">
+<a class="hidden sm:flex items-center justify-center h-9 px-4 rounded-lg bg-surface-dark border border-white/10 text-white text-sm font-bold hover:bg-white/5 transition-colors" href="#contact">
+                    Contact
+                </a>
+<button class="md:hidden text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow pt-28 pb-20 px-6 sm:px-8 max-w-7xl mx-auto w-full flex flex-col gap-10">
+<div>
+<a class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+                Back to Projects
+            </a>
+</div>
+<section class="flex flex-col gap-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider border border-primary/20">AI &amp; Visualization</span>
+<span class="px-3 py-1 rounded-full bg-surface-dark text-gray-400 text-xs font-bold uppercase tracking-wider border border-white/5">2023</span>
+</div>
+<h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                        Neural Net <span class="text-primary">Visualizer</span>
+</h1>
+<p class="text-xl text-gray-400 max-w-2xl">
+                        A real-time 3D exploration tool for researchers to debug and understand deep learning architectures.
+                    </p>
+</div>
+<div class="flex gap-4">
+<a class="flex items-center gap-2 h-12 px-6 rounded-lg bg-primary text-background-dark font-bold hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+                        Live Demo
+                    </a>
+<a class="flex items-center justify-center size-12 rounded-lg bg-surface-dark border border-white/10 text-white hover:bg-white hover:text-background-dark transition-all duration-300" href="#">
+<span class="material-symbols-outlined">code</span>
+</a>
+</div>
+</div>
+<div class="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden bg-surface-dark border border-white/10 shadow-2xl">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA1XvQ_q7CnUSS-upD4AYeG8AhDgMcN56WdfrvWbYgmlewnaWjPFuj7Yapn64QNxP_nZ3pWmQIZ2zAD7-icK6urarK2quh-qgY1C5qJgxwlWExnKAwdk8FDggr2DQGuzf-ZmVbArlZAkF3YqdrcEPF8rHw1plw1kq-iB1gQdivvF7ekqZim8gAxSiX4PjZn1ochQh5jlz31h-4vW_u2VwqKYUcv2MR2rPo2u-mN6X4YQ04la3JSotQ8UifffjYMLU475XKZTd_9omx1');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 hidden md:flex items-center gap-6 p-4 rounded-xl bg-surface-dark/90 backdrop-blur border border-white/10">
+<div>
+<p class="text-xs text-gray-500 uppercase tracking-wide">Platform</p>
+<p class="text-white font-bold">Web / Desktop</p>
+</div>
+<div class="w-px h-8 bg-white/10"></div>
+<div>
+<p class="text-xs text-gray-500 uppercase tracking-wide">Client</p>
+<p class="text-white font-bold">Open Research Lab</p>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pt-8">
+<div class="lg:col-span-8 flex flex-col gap-16">
+<section class="space-y-6">
+<h2 class="text-2xl font-bold text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">description</span>
+                        Project Overview
+                    </h2>
+<div class="prose prose-invert prose-lg text-gray-400 leading-relaxed max-w-none">
+<p>
+                            Understanding the inner workings of complex neural networks remains a significant challenge for researchers. The "Black Box" problem often hinders the optimization of model architectures.
+                        </p>
+<p>
+                            I built the Neural Net Visualizer to bridge this gap. This web-based application parses standard model files (ONNX, PyTorch) and generates an interactive 3D graph representation. Users can zoom into specific layers, inspect weights in real-time, and visualize the flow of tensors through the network. The goal was to create a tool that is not only functional but also performant enough to handle models with millions of parameters directly in the browser.
+                        </p>
+</div>
+</section>
+<section class="space-y-8">
+<div class="flex justify-between items-end">
+<h2 class="text-2xl font-bold text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">architecture</span>
+                            Architecture &amp; System Design
+                        </h2>
+</div>
+<p class="text-gray-400">
+                        The system follows a client-server architecture designed for heavy computational offloading. The backend handles model parsing and simplification, while the frontend focuses on high-performance WebGL rendering.
+                    </p>
+<div class="w-full h-80 rounded-xl bg-surface-dark border-2 border-dashed border-white/10 diagram-pattern relative flex items-center justify-center overflow-hidden group">
+<div class="absolute inset-0 flex items-center justify-center gap-8 opacity-50 group-hover:opacity-100 transition-opacity duration-500">
+<div class="flex flex-col items-center gap-2">
+<div class="w-32 h-20 rounded bg-background-dark border border-primary/30 flex items-center justify-center text-primary/80 font-mono text-xs shadow-[0_0_15px_rgba(6,206,224,0.1)]">
+                                    FastAPI Backend
+                                </div>
+<span class="material-symbols-outlined text-gray-600">arrow_downward</span>
+</div>
+<div class="h-px w-16 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+<div class="flex flex-col items-center gap-2 transform translate-y-8">
+<div class="w-32 h-20 rounded bg-background-dark border border-blue-500/30 flex items-center justify-center text-blue-400/80 font-mono text-xs shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                                    Web Socket
+                                </div>
+</div>
+<div class="h-px w-16 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-32 h-20 rounded bg-background-dark border border-green-500/30 flex items-center justify-center text-green-400/80 font-mono text-xs shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                                    React Three Fiber
+                                </div>
+<span class="material-symbols-outlined text-gray-600">arrow_upward</span>
+</div>
+</div>
+<div class="absolute bottom-4 right-4 text-xs text-gray-500 font-mono bg-background-dark px-2 py-1 rounded border border-white/5">
+                            FIG 1.0: System Data Flow
+                        </div>
+</div>
+</section>
+<section class="space-y-6">
+<h2 class="text-2xl font-bold text-white flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">psychology_alt</span>
+                        Key Challenges &amp; Solutions
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-dark p-6 rounded-xl border border-white/5 hover:border-primary/30 transition-colors">
+<div class="flex items-center gap-3 mb-4">
+<div class="p-2 rounded bg-red-500/10 text-red-400">
+<span class="material-symbols-outlined">speed</span>
+</div>
+<h3 class="text-lg font-bold text-white">Rendering Bottlenecks</h3>
+</div>
+<p class="text-sm text-gray-400 mb-2 font-semibold">Challenge:</p>
+<p class="text-sm text-gray-400 mb-4">Rendering 100k+ nodes for large language models caused the DOM to freeze.</p>
+<div class="h-px w-full bg-white/5 mb-4"></div>
+<p class="text-sm text-gray-400 mb-2 font-semibold text-primary">Solution:</p>
+<p class="text-sm text-gray-300">Implemented <strong>InstancedMesh</strong> in Three.js to render identical geometries with a single draw call, maintaining 60 FPS.</p>
+</div>
+<div class="bg-surface-dark p-6 rounded-xl border border-white/5 hover:border-primary/30 transition-colors">
+<div class="flex items-center gap-3 mb-4">
+<div class="p-2 rounded bg-yellow-500/10 text-yellow-400">
+<span class="material-symbols-outlined">dataset</span>
+</div>
+<h3 class="text-lg font-bold text-white">Data Serialization</h3>
+</div>
+<p class="text-sm text-gray-400 mb-2 font-semibold">Challenge:</p>
+<p class="text-sm text-gray-400 mb-4">JSON parsing for 50MB+ model architecture files was too slow on the client.</p>
+<div class="h-px w-full bg-white/5 mb-4"></div>
+<p class="text-sm text-gray-400 mb-2 font-semibold text-primary">Solution:</p>
+<p class="text-sm text-gray-300">Developed a custom <strong>Protocol Buffers</strong> schema to stream binary data, reducing payload size by 40% and parse time by 70%.</p>
+</div>
+</div>
+</section>
+</div>
+<aside class="lg:col-span-4 space-y-8">
+<div class="bg-surface-dark rounded-xl p-6 border border-white/5">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">code</span>
+                        Tech Stack
+                    </h3>
+<div class="space-y-6">
+<div>
+<p class="text-xs font-bold text-gray-500 uppercase mb-3">Frontend</p>
+<div class="flex flex-wrap gap-2">
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="size-2 rounded-full bg-blue-400"></span> React
+                                </div>
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="size-2 rounded-full bg-white"></span> Three.js
+                                </div>
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="size-2 rounded-full bg-cyan-400"></span> Tailwind
+                                </div>
+</div>
+</div>
+<div>
+<p class="text-xs font-bold text-gray-500 uppercase mb-3">Backend</p>
+<div class="flex flex-wrap gap-2">
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="size-2 rounded-full bg-yellow-400"></span> Python
+                                </div>
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="size-2 rounded-full bg-green-400"></span> FastAPI
+                                </div>
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="size-2 rounded-full bg-orange-400"></span> PyTorch
+                                </div>
+</div>
+</div>
+<div>
+<p class="text-xs font-bold text-gray-500 uppercase mb-3">DevOps</p>
+<div class="flex flex-wrap gap-2">
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="material-symbols-outlined text-base text-blue-500">dock</span> Docker
+                                </div>
+<div class="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-white/5 text-sm text-gray-300">
+<span class="material-symbols-outlined text-base text-white">cloud</span> AWS
+                                </div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-br from-surface-dark to-surface-dark-highlight rounded-xl p-6 border border-white/5">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">trending_up</span>
+                        Results &amp; Outcomes
+                    </h3>
+<div class="space-y-6 relative">
+<div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-white/5"></div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-1.5 size-3.5 bg-background-dark border-2 border-primary rounded-full"></div>
+<p class="text-3xl font-bold text-white">50%</p>
+<p class="text-sm text-gray-400">Reduction in model debugging time for the research team.</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-1.5 size-3.5 bg-background-dark border-2 border-green-500 rounded-full"></div>
+<p class="text-3xl font-bold text-white">3 Labs</p>
+<p class="text-sm text-gray-400">Currently adopted by major university research labs.</p>
+</div>
+<div class="relative pl-6">
+<div class="absolute left-0 top-1.5 size-3.5 bg-background-dark border-2 border-blue-500 rounded-full"></div>
+<p class="text-3xl font-bold text-white">60 FPS</p>
+<p class="text-sm text-gray-400">Consistent performance on consumer-grade hardware.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-dark rounded-xl p-6 border border-white/5 flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl text-white">folder_data</span>
+<div>
+<p class="text-white font-bold text-sm">alexdev/neural-viz</p>
+<p class="text-xs text-gray-500">Public Repository</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-gray-500">open_in_new</span>
+</div>
+<div class="flex gap-4 text-xs text-gray-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">star</span> 1.2k
+                        </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">call_split</span> 140
+                        </div>
+<div class="flex items-center gap-1">
+<span class="size-2 rounded-full bg-green-500"></span> Active
+                        </div>
+</div>
+<a class="w-full py-2 rounded border border-white/10 text-center text-sm font-medium text-gray-300 hover:bg-white hover:text-background-dark transition-colors" href="#">
+                        View Source Code
+                    </a>
+</div>
+</aside>
+</div>
+</main>
+<footer class="border-t border-white/5 bg-background-dark py-12 px-6">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-xl">terminal</span>
+</div>
+<h2 class="text-white text-lg font-bold">ALEX<span class="text-primary">DEV</span></h2>
+</div>
+<div class="text-gray-500 text-sm">
+                © 2023 Alex Dev. Designed with 💙 &amp; Code.
+            </div>
+<div class="flex gap-4">
+<a class="text-gray-400 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">mail</span></a>
+<a class="text-gray-400 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">dataset</span></a> 
+<a class="text-gray-400 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">work</span></a> 
+</div>
+</div>
+</footer>
+</div>
+
+</body></html>

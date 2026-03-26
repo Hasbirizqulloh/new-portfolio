@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/components/layout/Navbar";
+
+// Temporary Footer placeholder
+const Footer = () => (
+  <footer className="py-8 text-center text-gray-500 text-sm border-t border-white/5">
+    © {new Date().getFullYear()} Hasbirizqulloh. Built with Next.js & Tailwind.
+  </footer>
+);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +31,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
