@@ -5,95 +5,27 @@ import { Search, Clock, ArrowRight, User, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-export const blogPosts = [
-    {
-        id: 1,
-        title: "Architecting High-Throughput Real-Time AI Inference Pipelines",
-        excerpt: "An in-depth look at building a scalable, low-latency machine learning inference system using FastAPI, Redis, and Kubernetes. Learn how to handle traffic spikes and optimize model loading for production environments.",
-        category: "System Design",
-        date: "Oct 24, 2023",
-        readTime: "5 min read",
-        author: "Hasbirizqulloh",
-        tags: ["system"],
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAOtxTuhk5v6MgyxBMSMsmoMowfSXj8E4O-N3nvcRyqUFXbLnVMeXqzjsTMctA3iciLFHrbo2EA7zyVk2ttBL-f29P8YEhqe1wV5qJLokakqp-BJvTlunm3tDojs4dflOmtg5OoJS0sCqNGvjHWoSySZWIG1b-fy9ji2JTm4mXpY4_hUm2M85NXrRl67LWoH_x1EvvL1cuF39OyXeWKjBGTkglQ-dfidUzGVL4QZfR95R7X8y4K-Z7YleIE-A4P1NLqagvYRTez4G-A",
-        featured: true,
-    },
-    {
-        id: 2,
-        title: "Fine-Tuning Open Source LLMs for Domain-Specific Tasks",
-        excerpt: "A practical guide to adapting models like LLaMA-2 for specialized domains using QLoRA, reducing compute requirements while maintaining high accuracy.",
-        category: "Deep Learning",
-        date: "Oct 15, 2023",
-        readTime: "8 min read",
-        author: "Hasbirizqulloh",
-        tags: ["llm"],
-        featured: false,
-    },
-    {
-        id: 3,
-        title: "Building Robust ETL Pipelines with Apache Airflow and dbt",
-        excerpt: "How to structure your data warehousing projects for scalability and maintainability. Exploring modern data stack patterns and best practices.",
-        category: "Data Engineering",
-        date: "Sep 28, 2023",
-        readTime: "6 min read",
-        author: "Hasbirizqulloh",
-        tags: ["python"],
-        featured: false,
-    },
-    {
-        id: 4,
-        title: "State Management in React 18: Beyond Redux",
-        excerpt: "Evaluating modern state management solutions like Zustand and Jotai for large-scale enterprise applications. Performance comparisons included.",
-        category: "Fullstack",
-        date: "Sep 12, 2023",
-        readTime: "7 min read",
-        author: "Hasbirizqulloh",
-        tags: ["react"],
-        featured: false,
-    },
-    {
-        id: 5,
-        title: "Event-Driven Microservices: A Practical Architecture",
-        excerpt: "Designing resilient backend systems using Kafka, Node.js, and Docker. Strategies for handling distributed transactions and data consistency.",
-        category: "System Design",
-        date: "Aug 30, 2023",
-        readTime: "10 min read",
-        author: "Hasbirizqulloh",
-        tags: ["backend"],
-        featured: false,
-    },
-    {
-        id: 6,
-        title: "Optimizing Vector Search for RAG Applications",
-        excerpt: "A benchmark of Pinecone, Milvus, and pgvector for retrieval-augmented generation systems. Balancing accuracy with retrieval speed.",
-        category: "Deep Learning",
-        date: "Aug 14, 2023",
-        readTime: "5 min read",
-        author: "Hasbirizqulloh",
-        tags: ["llm"],
-        featured: false,
-    },
-    {
-        id: 7,
-        title: "Streaming Analytics with Apache Flink and Kafka",
-        excerpt: "Processing millions of events per second in real-time. Creating powerful dashboards with exactly-once processing semantics.",
-        category: "Data Engineering",
-        date: "Jul 22, 2023",
-        readTime: "8 min read",
-        author: "Hasbirizqulloh",
-        tags: ["python"],
-        featured: false,
-    },
-];
+export type BlogPost = {
+    id: string;
+    title: string;
+    excerpt: string;
+    category: string;
+    date: string;
+    readTime: string;
+    author: string;
+    tags: string[];
+    image?: string;
+    featured: boolean;
+};
 
 const filters = ["all", "python", "react", "llm"];
 
-export function Blog() {
+export function Blog({ initialPosts }: { initialPosts: BlogPost[] }) {
     const [activeFilter, setActiveFilter] = useState("all");
     const [searchQuery, setSearchQuery] = useState("");
 
-    const featuredPost = blogPosts.find((post) => post.featured);
-    const regularPosts = blogPosts.filter((post) => !post.featured);
+    const featuredPost = initialPosts.find((post) => post.featured);
+    const regularPosts = initialPosts.filter((post) => !post.featured);
 
     // Apply search and filter to regular posts
     const filteredPosts = regularPosts.filter((post) => {

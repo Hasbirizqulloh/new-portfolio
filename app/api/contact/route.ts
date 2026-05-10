@@ -1,25 +1,37 @@
-import { NextRequest } from "next/server";
-import { ApiHelper } from "@/backend/utils/api-response";
-import { ContactService } from "@/backend/services/contact.service";
+import { NextResponse } from 'next/server';
+import { ContactService } from '@/backend/services/contact.service';
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
     try {
-        // 1. Parse incoming request
-        const body = await req.json();
+        const body = await request.json();
+        const { name, email, subject, message } = body;
 
-        // 2. Delegate to Business Logic Layer (Service)
-        await ContactService.submitMessage(body);
-
-        // 3. Return Standardized Response
-        return ApiHelper.success(null, "Message sent successfully!");
-
-    } catch (error: any) {
-        console.error("[POST /api/contact] Error:", error);
-
-        if (error.message === "Email and message are required.") {
-            return ApiHelper.badRequest(error.message);
+        // Validation
+        if (!name || !email || !message) {
+            return NextResponse.json(
+                { success: false, error: 'Name, email, and message are required.' },
+                { status: 400 }
+            );
         }
 
-        return ApiHelper.error("Failed to send message", error);
+        // Use the service layer to process the message
+        const contactMessage = await ContactService.submitMessage({
+            name,
+            email,
+            subject,
+            message,
+        });
+
+        return NextResponse.json({
+            success: true,
+            message: 'Message sent successfully!',
+            id: contactMessage.id,
+        });
+    } catch (error) {
+        console.error('Contact API Error:', error);
+        return NextResponse.json(
+            { success: false, error: 'Internal server error.' },
+            { status: 500 }
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, Mail, Github, Linkedin, Twitter } from "lucide-react";
@@ -37,15 +38,19 @@ export function Hero() {
 
                     {/* CTA Buttons */}
                     <div className="flex flex-wrap gap-4 mt-2">
-                        <Button className="px-6 py-6 rounded-lg bg-primary text-background-dark font-bold hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shadow-neon border-none">
-                            View Projects
-                        </Button>
-                        <Button
-                            variant="outline"
-                            className="px-6 py-6 rounded-lg border border-[#2f333a] bg-transparent text-white font-medium hover:border-primary/50 hover:bg-surface-dark transition-all hover:scale-105 active:scale-95"
-                        >
-                            Contact Me
-                        </Button>
+                        <Link href="/projects">
+                            <Button className="px-6 py-6 rounded-lg bg-primary text-background-dark font-bold hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 shadow-neon border-none">
+                                View Projects
+                            </Button>
+                        </Link>
+                        <Link href="/contact">
+                            <Button
+                                variant="outline"
+                                className="px-6 py-6 rounded-lg border border-[#2f333a] bg-transparent text-white font-medium hover:border-primary/50 hover:bg-surface-dark transition-all hover:scale-105 active:scale-95"
+                            >
+                                Contact Me
+                            </Button>
+                        </Link>
                     </div>
                 </div>
 

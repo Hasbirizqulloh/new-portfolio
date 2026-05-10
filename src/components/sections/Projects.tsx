@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 // Define types for a project
-type Project = {
-    id: number;
+export type Project = {
+    id: string;
     title: string;
     description: string;
     category: string;
@@ -16,70 +16,13 @@ type Project = {
     tech: string[];
 };
 
-export const projectsData: Project[] = [
-    {
-        id: 1,
-        title: "Neural Net Visualizer",
-        description: "An interactive 3D tool for visualizing neural network layers and weights in real-time. Built to help researchers debug architectures visually.",
-        category: "AI / ML",
-        categoryColor: "text-primary border-primary/20",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA1XvQ_q7CnUSS-upD4AYeG8AhDgMcN56WdfrvWbYgmlewnaWjPFuj7Yapn64QNxP_nZ3pWmQIZ2zAD7-icK6urarK2quh-qgY1C5qJgxwlWExnKAwdk8FDggr2DQGuzf-ZmVbArlZAkF3YqdrcEPF8rHw1plw1kq-iB1gQdivvF7ekqZim8gAxSiX4PjZn1ochQh5jlz31h-4vW_u2VwqKYUcv2MR2rPo2u-mN6X4YQ04la3JSotQ8UifffjYMLU475XKZTd_9omx1",
-        tech: ["React Three Fiber", "Python", "FastAPI"],
-    },
-    {
-        id: 2,
-        title: "Microservices E-com Platform",
-        description: "Scalable e-commerce backend built with 15+ microservices. Features event-driven architecture, distributed tracing, and real-time inventory.",
-        category: "Fullstack",
-        categoryColor: "text-blue-400 border-blue-400/20",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA-qnUMokfdzQuxBcIDPHxRKsaD2Ts1czG7wdYZqfvxATF3J9vTEPFgYEoxi1rp-8C9iErN4eqRBC7YIJdQHdW_0NCMX1xk6g92xB3ZHCg2Sssj-4GMadB9XWMObKnTPPnfvLje5PlBZjmUuIeyKckWxOCUWCVHqD8Q3MJZU0qmpZSOFBTtxRx_-0X_LDtTw7gBk-1zUrPRZYOJtZJWO7W_fynynxBpOTVQ6ouKyZGAEY1A81NVVyAtP14GDwQJNH_DL2MtPs62e5IC",
-        tech: ["Go", "gRPC", "Kafka", "K8s"],
-    },
-    {
-        id: 3,
-        title: "Enterprise AI Assistant",
-        description: "An intelligent customer support bot capable of intent recognition and sentiment analysis. Fine-tuned on proprietary company data.",
-        category: "AI / ML",
-        categoryColor: "text-primary border-primary/20",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCsAXwIzQ9EDGMP7stV-E2dLFbJTe5K6LoANRPNGk59ZYoyMPX96Mlx4_lrKxwtOCDQX1XNH_BF8HY3rrdMrsHya2PIeQL8dey0wG8XCmtjNgPWWyH1Eqeh4ubvcN7yIZtMM6k7QVi6AzSLzwoPxVMyIXvdD4xsZ5v3MA9H6ILOpGtNkQeUEH-MLYvOGEnOgc2lIzcq2oZQeCsqGzYdGWshlzPH9TNuLNuzKA90ig0IIQiZwsbL2vcQkN-lc06pM3oflx74m0vGUbTY",
-        tech: ["LLMs", "LangChain", "Pinecone"],
-    },
-    {
-        id: 4,
-        title: "Real-time Analytics Pipeline",
-        description: "End-to-end ELT pipeline processing 5TB+ daily. Uses change data capture (CDC) to sync operational DBs with a Snowflake warehouse.",
-        category: "Data Eng",
-        categoryColor: "text-purple-400 border-purple-400/20",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA1XvQ_q7CnUSS-upD4AYeG8AhDgMcN56WdfrvWbYgmlewnaWjPFuj7Yapn64QNxP_nZ3pWmQIZ2zAD7-icK6urarK2quh-qgY1C5qJgxwlWExnKAwdk8FDggr2DQGuzf-ZmVbArlZAkF3YqdrcEPF8rHw1plw1kq-iB1gQdivvF7ekqZim8gAxSiX4PjZn1ochQh5jlz31h-4vW_u2VwqKYUcv2MR2rPo2u-mN6X4YQ04la3JSotQ8UifffjYMLU475XKZTd_9omx1",
-        tech: ["Apache Airflow", "Snowflake", "dbt"],
-    },
-    {
-        id: 5,
-        title: "Smart City IOT Dashboard",
-        description: "A centralized command center for monitoring IOT devices across a smart city infrastructure. Features map-based visualization and alert systems.",
-        category: "Fullstack",
-        categoryColor: "text-blue-400 border-blue-400/20",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA-qnUMokfdzQuxBcIDPHxRKsaD2Ts1czG7wdYZqfvxATF3J9vTEPFgYEoxi1rp-8C9iErN4eqRBC7YIJdQHdW_0NCMX1xk6g92xB3ZHCg2Sssj-4GMadB9XWMObKnTPPnfvLje5PlBZjmUuIeyKckWxOCUWCVHqD8Q3MJZU0qmpZSOFBTtxRx_-0X_LDtTw7gBk-1zUrPRZYOJtZJWO7W_fynynxBpOTVQ6ouKyZGAEY1A81NVVyAtP14GDwQJNH_DL2MtPs62e5IC",
-        tech: ["Vue.js", "Mapbox", "MQTT"],
-    },
-    {
-        id: 6,
-        title: "Automated Defect Detection",
-        description: "Computer vision system for manufacturing lines. Identifies defects with 99.8% accuracy at 120fps using edge-optimized models.",
-        category: "AI / ML",
-        categoryColor: "text-primary border-primary/20",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuATh4FbxKE0jidqyCanKvVINueWpVZKIFWrwwSoDgmY_A7BsZALkvnva9U0tjBC_wyFUCI5QzTcD44znEp6L8C6kAUyA8sDn-oBd5WD1rwEe9gS4oArWQyHhQxVqyYX2v9kNyzzUTgFCjH9kC4WKl5RX7WMX2rl_Si6sRpMCQsSxGSwFRcdAxcwc4EZgmMCV-3YNhpwcR8xON9hH7A3V64gW8dbP94RGRZmIbz6yQn9fBv049SWhpL6TgQtzwzw3fpLaYH-qOXJ9hOq",
-        tech: ["PyTorch", "OpenCV", "NVIDIA Jetson"],
-    },
-];
-
 const filters = ["All Projects", "Fullstack", "AI / ML", "Data Eng"];
 
-export function Projects() {
+export function Projects({ initialProjects }: { initialProjects: Project[] }) {
     const [activeFilter, setActiveFilter] = useState("All Projects");
     const [searchQuery, setSearchQuery] = useState("");
 
-    const filteredProjects = projectsData.filter((project) => {
+    const filteredProjects = initialProjects.filter((project) => {
         const matchesFilter =
             activeFilter === "All Projects" || project.category === activeFilter;
         const matchesSearch =
@@ -106,8 +49,8 @@ export function Projects() {
                 </p>
             </section>
 
-            {/* Filter & Search Bar - Sticky */}
-            <section className="sticky top-16 md:top-20 z-40 py-4 bg-background-dark/95 backdrop-blur border-y border-[#2f333a] -mx-4 px-4 sm:mx-0 sm:px-0">
+            {/* Filter & Search Bar */}
+            <section className="py-4 border-b border-[#2f333a] -mx-4 px-4 sm:mx-0 sm:px-0">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2 p-1 bg-surface-dark rounded-lg border border-[#2f333a] w-full md:w-auto overflow-x-auto hide-scrollbar">
                         {filters.map((filter) => (

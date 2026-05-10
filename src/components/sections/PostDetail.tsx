@@ -3,22 +3,23 @@
 import React from "react";
 import { User, Calendar, Clock, Share2, Link as LinkIcon, Bookmark, Mail, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { blogPosts } from "./Blog";
 
-interface PostDetailProps {
-    id: string;
+export interface PostDetailProps {
+    post: {
+        id: string;
+        title: string;
+        excerpt: string;
+        content: string;
+        category: string;
+        date: string;
+        readTime: string;
+        author: string;
+        tags: string[];
+        image?: string;
+    };
 }
 
-export function PostDetail({ id }: PostDetailProps) {
-    // Find the post, or show a 404 if it doesn't exist
-    const post = blogPosts.find((p) => p.id.toString() === id);
-
-    if (!post) {
-        // In a real app we might fetch from API, for now if ID is not 1 we just return not found
-        // Or we could mock it using the ID
-        return notFound();
-    }
+export function PostDetail({ post }: PostDetailProps) {
 
     return (
         <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
@@ -104,50 +105,14 @@ export function PostDetail({ id }: PostDetailProps) {
                         </span>
                     </div>
 
+
                     <div className="prose prose-invert prose-lg max-w-none prose-p:text-text-main prose-headings:text-white prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-white prose-li:text-text-main">
                         <p className="text-xl leading-relaxed text-text-muted mb-8">
                             {post.excerpt}
                         </p>
-                        <h2 className="text-2xl font-bold mt-12 mb-6">Introduction</h2>
-                        <p className="mb-6">
-                            Deploying machine learning models to production is often more challenging than training them. While a Jupyter notebook is a great environment for experimentation, a production system needs to handle concurrent requests, manage resources efficiently, and scale dynamically based on traffic.
-                        </p>
-                        <h2 className="text-2xl font-bold mt-12 mb-6">The Challenge: Latency vs Throughput</h2>
-                        <p className="mb-6">
-                            When designing an inference pipeline, you typically face a trade-off between latency (how fast a single request is processed) and throughput (how many requests can be processed per second).
-                        </p>
-                        <ul className="list-disc pl-6 mb-8 space-y-2">
-                            <li><strong>Direct Inference:</strong> Great for latency, poor for throughput. Every request blocks the server.</li>
-                            <li><strong>Batch Inference:</strong> Great for throughput, poor for latency. Requests wait until a batch is full.</li>
-                        </ul>
-                        <h2 className="text-2xl font-bold mt-12 mb-6">Architecture Overview</h2>
-                        <p className="mb-6">
-                            To achieve the best of both worlds, we implemented a microservice architecture using FastAPI for the API gateway, Redis as a message broker for dynamic batching, and an isolated model inference worker.
-                        </p>
-                        <h3 className="text-xl font-bold mt-8 mb-4">FastAPI for Serving</h3>
-                        <p className="mb-6">
-                            FastAPI is an excellent choice for the API layer due to its asynchronous support and automatic OpenAPI documentation. Here is a simplified version of our ingestion endpoint:
-                        </p>
-                        <pre className="bg-[#151619] border border-[#2f333a] rounded-xl p-6 overflow-x-auto mb-8 shadow-inner">
-                            <code className="text-sm font-mono text-text-main">
-                                <span className="text-purple-400">from</span> fastapi <span className="text-purple-400">import</span> FastAPI, BackgroundTasks{"\n"}
-                                <span className="text-purple-400">from</span> pydantic <span className="text-purple-400">import</span> BaseModel{"\n"}
-                                <span className="text-purple-400">import</span> redis{"\n"}
-                                app = FastAPI(){"\n"}
-                                redis_client = redis.Redis(host=<span className="text-green-400">'localhost'</span>, port=<span className="text-orange-400">6379</span>){"\n"}
-                                <span className="text-purple-400">class</span> <span className="text-blue-400">InferenceRequest</span>(BaseModel):{"\n"}
-                                {"    "}text: <span className="text-primary">str</span>{"\n"}
-                                <span className="text-yellow-400">@app.post</span>(<span className="text-green-400">"/predict"</span>){"\n"}
-                                <span className="text-purple-400">async def</span> <span className="text-blue-400">predict</span>(request: InferenceRequest):{"\n"}
-                                {"    "}<span className="text-text-muted"># Push request to Redis queue for the worker</span>{"\n"}
-                                {"    "}job_id = redis_client.rpush(<span className="text-green-400">'inference_queue'</span>, request.text){"\n"}
-                                {"    "}<span className="text-purple-400">return</span> {"{"}<span className="text-green-400">"job_id"</span>: job_id, <span className="text-green-400">"status"</span>: <span className="text-green-400">"processing"</span>{"}"}
-                            </code>
-                        </pre>
-                        <h3 className="text-xl font-bold mt-8 mb-4">Conclusion</h3>
-                        <p className="mb-6">
-                            By decoupling the API gateway from the actual inference using Redis, we were able to scale our worker nodes independently. This architecture easily handles sudden spikes in traffic while keeping our GPU utilization optimal.
-                        </p>
+                        <div className="whitespace-pre-line">
+                            {post.content}
+                        </div>
                     </div>
 
                     <div className="mt-16 pt-12 border-t border-[#2f333a]">

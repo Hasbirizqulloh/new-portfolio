@@ -16,7 +16,31 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-export function About() {
+export type EducationItem = {
+    id: string;
+    degree: string;
+    institution: string;
+    description: string;
+    startYear: number;
+    endYear: number | null;
+};
+
+export type CertificationItem = {
+    id: string;
+    name: string;
+    issuer: string;
+    description: string;
+    issuedDate: string;
+    credentialUrl: string | null;
+};
+
+interface AboutProps {
+    educations: EducationItem[];
+    certifications: CertificationItem[];
+    resumeUrl: string;
+}
+
+export function About({ educations, certifications, resumeUrl }: AboutProps) {
     return (
         <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
@@ -41,49 +65,28 @@ export function About() {
                             Quick Facts
                         </h3>
                         <div className="flex flex-col gap-4">
-                            {/* Location */}
                             <div className="flex items-start gap-3">
                                 <MapPin className="text-primary mt-0.5 w-5 h-5" />
                                 <div>
-                                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                                        Location
-                                    </p>
-                                    <p className="text-sm text-text-main font-medium">
-                                        Indonesia
-                                    </p>
+                                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">Location</p>
+                                    <p className="text-sm text-text-main font-medium">Indonesia</p>
                                 </div>
                             </div>
-
-                            {/* Role */}
                             <div className="flex items-start gap-3">
                                 <Terminal className="text-primary mt-0.5 w-5 h-5" />
                                 <div>
-                                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                                        Focus
-                                    </p>
-                                    <p className="text-sm text-text-main font-medium">
-                                        AI Integration, System Architecture
-                                    </p>
+                                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">Focus</p>
+                                    <p className="text-sm text-text-main font-medium">AI Integration, System Architecture</p>
                                 </div>
                             </div>
-
-                            {/* Stack */}
                             <div className="flex items-start gap-3">
                                 <Layers className="text-primary mt-0.5 w-5 h-5" />
                                 <div>
-                                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-                                        Core Stack
-                                    </p>
+                                    <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">Core Stack</p>
                                     <div className="flex flex-wrap gap-2 mt-1">
-                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
-                                            Python
-                                        </span>
-                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
-                                            React & Next.js
-                                        </span>
-                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
-                                            TypeScript
-                                        </span>
+                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">Python</span>
+                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">React & Next.js</span>
+                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">TypeScript</span>
                                     </div>
                                 </div>
                             </div>
@@ -91,44 +94,34 @@ export function About() {
 
                         {/* Actions / Socials */}
                         <div className="mt-8 flex justify-between gap-2 border-t border-[#2f333a] pt-4">
-                            <a
-                                className="group flex flex-col items-center gap-1 w-full rounded-lg hover:bg-white/5 p-2 transition-colors"
-                                href="#"
-                            >
+                            <a className="group flex flex-col items-center gap-1 w-full rounded-lg hover:bg-white/5 p-2 transition-colors" href="https://github.com/hasbirizqulloh" target="_blank" rel="noopener noreferrer">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background-dark text-text-muted group-hover:text-white group-hover:ring-1 group-hover:ring-primary">
                                     <Github className="w-4 h-4" />
                                 </div>
-                                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wide">
-                                    GitHub
-                                </span>
+                                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wide">GitHub</span>
                             </a>
-                            <a
-                                className="group flex flex-col items-center gap-1 w-full rounded-lg hover:bg-white/5 p-2 transition-colors"
-                                href="#"
-                            >
+                            <a className="group flex flex-col items-center gap-1 w-full rounded-lg hover:bg-white/5 p-2 transition-colors" href="https://www.linkedin.com/in/moh-hasbi" target="_blank" rel="noopener noreferrer">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background-dark text-text-muted group-hover:text-white group-hover:ring-1 group-hover:ring-primary">
                                     <Linkedin className="w-4 h-4" />
                                 </div>
-                                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wide">
-                                    LinkedIn
-                                </span>
+                                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wide">LinkedIn</span>
                             </a>
-                            <a
-                                className="group flex flex-col items-center gap-1 w-full rounded-lg hover:bg-white/5 p-2 transition-colors"
-                                href="#"
-                            >
+                            <a className="group flex flex-col items-center gap-1 w-full rounded-lg hover:bg-white/5 p-2 transition-colors" href="mailto:emailkamu@domain.com?subject=Tawaran%20Kerja%20Sama&body=Halo,%20saya%20melihat%20portofolio%20Anda%20dan%20tertarik%20untuk%20berdiskusi%20lebih%20lanjut.">
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background-dark text-text-muted group-hover:text-white group-hover:ring-1 group-hover:ring-primary">
                                     <Mail className="w-4 h-4" />
                                 </div>
-                                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wide">
-                                    Contact
-                                </span>
+                                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wide">Contact</span>
                             </a>
                         </div>
 
-                        <button className="flex items-center justify-center gap-2 mt-4 w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-background-dark transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                        <a
+                            href={resumeUrl.includes('?') ? `${resumeUrl}&download=Moh_Hasbi_Rizqulloh_Resume_2026-03-27.pdf` : (resumeUrl !== "#" ? `${resumeUrl}?download=Moh_Hasbi_Rizqulloh_Resume_2026-03-27.pdf` : "#")}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 mt-4 w-full rounded-lg bg-primary py-2.5 text-sm font-bold text-background-dark transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                        >
                             <Download className="w-4 h-4" /> Download Resume
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -138,9 +131,7 @@ export function About() {
                     <section>
                         <div className="mb-4 flex items-center gap-2 text-primary">
                             <Sparkles className="w-6 h-6" />
-                            <span className="text-sm font-bold uppercase tracking-widest">
-                                About Me
-                            </span>
+                            <span className="text-sm font-bold uppercase tracking-widest">About Me</span>
                         </div>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
                             Bridging the gap between{" "}
@@ -166,7 +157,7 @@ export function About() {
                         </div>
                     </section>
 
-                    {/* Education Section */}
+                    {/* Education & Certifications Section - DYNAMIC */}
                     <section>
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-2xl font-bold text-white flex items-center gap-3">
@@ -175,93 +166,57 @@ export function About() {
                             </h2>
                         </div>
                         <div className="flex flex-col gap-4">
-                            {/* Education Card 1 */}
-                            <div className="group relative overflow-hidden rounded-xl bg-surface-dark p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-neon hover:border-primary/30 border border-[#2f333a]">
-                                <div className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-4 z-10 relative">
-                                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#151619] border border-[#2f333a] text-primary">
-                                        <Library className="w-6 h-6" />
-                                    </div>
-                                    <div className="flex-grow">
-                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
-                                            <div>
-                                                <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
-                                                    Master of Science in Computer Science
-                                                </h3>
-                                                <p className="text-sm text-text-muted">
-                                                    Stanford University (Example)
-                                                </p>
-                                            </div>
-                                            <span className="mt-1 sm:mt-0 rounded-full bg-[#151619] border border-[#2f333a] px-3 py-1 text-xs font-medium text-text-muted">
-                                                2020 — 2022
-                                            </span>
+                            {/* Dynamic Education Cards */}
+                            {educations.map((edu) => (
+                                <div key={edu.id} className="group relative overflow-hidden rounded-xl bg-surface-dark p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-neon hover:border-primary/30 border border-[#2f333a]">
+                                    <div className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                    <div className="flex flex-col sm:flex-row sm:items-start gap-4 z-10 relative">
+                                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#151619] border border-[#2f333a] text-primary">
+                                            <Library className="w-6 h-6" />
                                         </div>
-                                        <p className="text-sm text-text-muted leading-relaxed">
-                                            Specialization in Artificial Intelligence and
-                                            Human-Computer Interaction.
-                                        </p>
+                                        <div className="flex-grow">
+                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
+                                                        {edu.degree}
+                                                    </h3>
+                                                    <p className="text-sm text-text-muted">{edu.institution}</p>
+                                                </div>
+                                                <span className="mt-1 sm:mt-0 rounded-full bg-[#151619] border border-[#2f333a] px-3 py-1 text-xs font-medium text-text-muted">
+                                                    {edu.startYear} — {edu.endYear || "Present"}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-text-muted leading-relaxed">{edu.description}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ))}
 
-                            {/* Education Card 2 */}
-                            <div className="group relative overflow-hidden rounded-xl bg-surface-dark p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-neon hover:border-primary/30 border border-[#2f333a]">
-                                <div className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-4 z-10 relative">
-                                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#151619] border border-[#2f333a] text-primary">
-                                        <GraduationCap className="w-6 h-6" />
-                                    </div>
-                                    <div className="flex-grow">
-                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
-                                            <div>
-                                                <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
-                                                    Bachelor of Science in Data Science
-                                                </h3>
-                                                <p className="text-sm text-text-muted">
-                                                    Massachusetts Institute of Technology (Example)
-                                                </p>
-                                            </div>
-                                            <span className="mt-1 sm:mt-0 rounded-full bg-[#151619] border border-[#2f333a] px-3 py-1 text-xs font-medium text-text-muted">
-                                                2016 — 2020
-                                            </span>
+                            {/* Dynamic Certification Cards */}
+                            {certifications.map((cert) => (
+                                <div key={cert.id} className="group relative overflow-hidden rounded-xl bg-surface-dark p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-neon hover:border-primary/30 border border-[#2f333a]">
+                                    <div className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                    <div className="flex flex-col sm:flex-row sm:items-start gap-4 z-10 relative">
+                                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#151619] border border-[#2f333a] text-primary">
+                                            <Award className="w-6 h-6" />
                                         </div>
-                                        <p className="text-sm text-text-muted leading-relaxed">
-                                            Minor in Cognitive Science. Lead developer for the
-                                            Undergraduate Research Opportunities Program (UROP).
-                                        </p>
+                                        <div className="flex-grow">
+                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
+                                                        {cert.name}
+                                                    </h3>
+                                                    <p className="text-sm text-text-muted">{cert.issuer}</p>
+                                                </div>
+                                                <span className="mt-1 sm:mt-0 rounded-full bg-[#151619] border border-[#2f333a] px-3 py-1 text-xs font-medium text-text-muted">
+                                                    {cert.issuedDate}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-text-muted leading-relaxed">{cert.description}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            {/* Certification Card */}
-                            <div className="group relative overflow-hidden rounded-xl bg-surface-dark p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-neon hover:border-primary/30 border border-[#2f333a]">
-                                <div className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-primary/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
-                                <div className="flex flex-col sm:flex-row sm:items-start gap-4 z-10 relative">
-                                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#151619] border border-[#2f333a] text-primary">
-                                        <Award className="w-6 h-6" />
-                                    </div>
-                                    <div className="flex-grow">
-                                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
-                                            <div>
-                                                <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
-                                                    AWS Certified Solutions Architect
-                                                </h3>
-                                                <p className="text-sm text-text-muted">
-                                                    Amazon Web Services
-                                                </p>
-                                            </div>
-                                            <span className="mt-1 sm:mt-0 rounded-full bg-[#151619] border border-[#2f333a] px-3 py-1 text-xs font-medium text-text-muted">
-                                                Issued 2023
-                                            </span>
-                                        </div>
-                                        <p className="text-sm text-text-muted leading-relaxed">
-                                            Professional certification focusing on designing distributed
-                                            systems on AWS. Validates expertise in designing scalable,
-                                            highly available, and fault-tolerant systems.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </section>
 

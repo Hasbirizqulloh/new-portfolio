@@ -1,0 +1,6 @@
+{
+    "editor.allowVariableFontsInAccessibilityMode": false,
+    "files.autoSave": "onWindowChange",
+    "files.autoSaveWhenNoErrors": true,
+    "files.autoSaveWorkspaceFilesOnly": true
+}

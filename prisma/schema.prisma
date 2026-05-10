@@ -13,22 +13,30 @@ datasource db {
 // 1. PROJECT ENTITY
 // ------------------------------------------------------
 model Project {
-  id                  String             @id @default(uuid())
-  title               String
-  slug                String             @unique
-  description         String
-  content             String             @db.Text
-  category            String
-  coverImageUrl       String?
-  liveDemoUrl         String?
-  sourceCodeUrl       String?
-  architectureDetails Json?              // For advanced diagrams/patterns
+  id                      String             @id @default(uuid())
+  title                   String
+  slug                    String             @unique
+  description             String
+  content                 String             @db.Text
+  category                String
+  coverImageUrl           String?
+  liveDemoUrl             String?
+  sourceCodeUrl           String?
+  
+  // Dynamic Architecture & System Design
+  architectureDescription String?            @db.Text
+  architectureImageUrl    String?
+  
+  // Fallback for complex advanced data if needed
+  architectureDetails     Json?              
 
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
 
   // Relations
-  technologies        ProjectTechnology[]
+  technologies            ProjectTechnology[]
+  challenges              ProjectChallenge[]
+  results                 ProjectResult[]
 }
 
 // ------------------------------------------------------
@@ -54,6 +62,40 @@ model ProjectTechnology {
   technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
 
   @@id([projectId, technologyId])
+}
+
+// ------------------------------------------------------
+// 3A. PROJECT CHALLENGE ENTITY (Task & Action)
+// ------------------------------------------------------
+model ProjectChallenge {
+  id          String   @id @default(uuid())
+  projectId   String
+  title       String   // e.g. "Rendering Bottlenecks"
+  challenge   String   @db.Text // e.g. "Rendering 100k+ nodes caused DOM freeze."
+  solution    String   @db.Text // e.g. "Implemented InstancedMesh in Three.js..."
+  iconType    String?  // Optional visual indicator (e.g. "TrendingUp")
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ------------------------------------------------------
+// 3B. PROJECT RESULT ENTITY (Result/Impact)
+// ------------------------------------------------------
+model ProjectResult {
+  id          String   @id @default(uuid())
+  projectId   String
+  metric      String   // e.g. "50%" or "60 FPS"
+  value       String   @db.Text // e.g. "Reduction in model debugging time."
+  color       String?  // e.g. "primary", "green", "blue" for UI styling
+  sortOrder   Int      @default(0)
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // ------------------------------------------------------
@@ -95,4 +137,48 @@ enum MessageStatus {
   UNREAD
   READ
   RESPONDED
+}
+
+// ------------------------------------------------------
+// 6. EDUCATION ENTITY
+// ------------------------------------------------------
+model Education {
+  id            String   @id @default(uuid())
+  degree        String              // e.g. "Master of Science in Computer Science"
+  institution   String              // e.g. "Stanford University"
+  description   String?  @db.Text
+  startYear     Int
+  endYear       Int?                // null = masih berjalan
+  sortOrder     Int      @default(0)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ------------------------------------------------------
+// 7. CERTIFICATION ENTITY
+// ------------------------------------------------------
+model Certification {
+  id            String   @id @default(uuid())
+  name          String              // e.g. "AWS Certified Solutions Architect"
+  issuer        String              // e.g. "Amazon Web Services"
+  description   String?  @db.Text
+  issuedDate    String              // e.g. "Issued 2023"
+  credentialUrl String?
+  sortOrder     Int      @default(0)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// ------------------------------------------------------
+// 8. SITE SETTING ENTITY
+// ------------------------------------------------------
+model SiteSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique // e.g. "resumeUrl"
+  value       String   @db.Text
+  description String?  @db.Text
+  
+  updatedAt   DateTime @updatedAt
 }
