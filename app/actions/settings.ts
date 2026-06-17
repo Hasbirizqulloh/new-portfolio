@@ -8,7 +8,7 @@ export async function updateSiteSetting(key: string, value: string) {
   const session = await auth();
 
   if (!session) {
-    throw new Error("Unauthorized");
+    return { success: false, error: "Unauthorized" };
   }
 
   try {
@@ -31,7 +31,7 @@ export async function updateSiteSetting(key: string, value: string) {
 
 export async function updateSiteSettings(settings: { key: string; value: string }[]) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     // Use a transaction to update all settings
@@ -56,7 +56,7 @@ export async function updateSiteSettings(settings: { key: string; value: string 
 
 export async function getSiteSettings() {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     const settings = await prisma.siteSetting.findMany();

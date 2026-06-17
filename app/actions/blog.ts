@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
  */
 export async function getAdminBlogs() {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     return await prisma.blogPost.findMany({
@@ -26,7 +26,7 @@ export async function getAdminBlogs() {
  */
 export async function saveBlog(data: any) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   const { id, title, slug, content, excerpt, coverImageUrl, category, isFeatured } = data;
 
@@ -52,7 +52,7 @@ export async function saveBlog(data: any) {
  */
 export async function deleteBlog(id: string) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     await prisma.blogPost.delete({ where: { id } });
@@ -69,6 +69,6 @@ export async function deleteBlog(id: string) {
  */
 export async function getBlogById(id: string) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
   return await prisma.blogPost.findUnique({ where: { id } });
 }

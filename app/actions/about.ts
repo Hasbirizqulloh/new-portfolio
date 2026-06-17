@@ -14,7 +14,7 @@ export async function getEducation() {
 
 export async function saveEducation(data: any) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   const { id, institution, degree, startYear, endYear, description } = data;
   try {
@@ -67,7 +67,7 @@ export async function getCertifications() {
 
 export async function saveCertification(data: any) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   const { id, name, issuer, issuedDate, credentialUrl, description } = data;
   try {

@@ -32,7 +32,7 @@ export async function getAdminProjects() {
  */
 export async function deleteProject(id: string) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     await prisma.project.delete({
@@ -53,7 +53,7 @@ export async function deleteProject(id: string) {
  */
 export async function saveProject(data: any) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   const { 
     id, 
@@ -145,7 +145,7 @@ export async function saveProject(data: any) {
  */
 export async function getProjectById(id: string) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   return await prisma.project.findUnique({
     where: { id },

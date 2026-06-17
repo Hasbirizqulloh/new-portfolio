@@ -24,6 +24,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   const addToast = useCallback((type: ToastType, message: string) => {
+    if (message === "Unauthorized") {
+      window.location.href = "/admin/login";
+      return;
+    }
+
     const id = Math.random().toString(36).substr(2, 9);
     setToasts((prev) => [...prev, { id, type, message }]);
 

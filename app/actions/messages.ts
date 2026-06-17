@@ -10,7 +10,7 @@ import { MessageStatus } from "@prisma/client";
  */
 export async function getAdminMessages() {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     return await prisma.contactMessage.findMany({
@@ -27,7 +27,7 @@ export async function getAdminMessages() {
  */
 export async function updateMessageStatus(id: string, status: MessageStatus) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     const updated = await prisma.contactMessage.update({
@@ -49,7 +49,7 @@ export async function updateMessageStatus(id: string, status: MessageStatus) {
  */
 export async function deleteMessage(id: string) {
   const session = await auth();
-  if (!session) throw new Error("Unauthorized");
+  if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     await prisma.contactMessage.delete({
