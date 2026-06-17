@@ -47,6 +47,8 @@ export async function updateSiteSettings(settings: { key: string; value: string 
 
     revalidatePath("/");
     revalidatePath("/admin/home-editor");
+    revalidatePath("/about");
+    revalidatePath("/admin/about");
     return { success: true };
   } catch (error) {
     console.error("Failed to update settings:", error);

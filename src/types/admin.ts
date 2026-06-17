@@ -80,4 +80,14 @@ export interface CertificationType {
   issuer: string;
   issuedDate: string;
   credentialUrl: string | null;
+  description: string | null;
+}
+
+export interface WorkExperienceType {
+  id: string;
+  position: string;
+  company: string;
+  description: string | null;
+  startDate: string;
+  endDate: string | null;
 }

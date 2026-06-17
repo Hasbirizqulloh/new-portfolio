@@ -12,7 +12,8 @@ import {
     GraduationCap,
     Library,
     Award,
-    Download
+    Download,
+    Briefcase
 } from "lucide-react";
 import Image from "next/image";
 
@@ -34,14 +35,24 @@ export type CertificationItem = {
     credentialUrl: string | null;
 };
 
+export type WorkExperienceItem = {
+    id: string;
+    position: string;
+    company: string;
+    description: string;
+    startDate: string;
+    endDate: string | null;
+};
+
 interface AboutProps {
     settings?: Record<string, string>;
     educations: EducationItem[];
     certifications: CertificationItem[];
+    experiences: WorkExperienceItem[];
     resumeUrl: string;
 }
 
-export function About({ settings, educations, certifications, resumeUrl }: AboutProps) {
+export function About({ settings, educations, certifications, experiences, resumeUrl }: AboutProps) {
     return (
         <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
@@ -152,6 +163,44 @@ export function About({ settings, educations, certifications, resumeUrl }: About
                             </p>
                         </div>
                     </section>
+
+                    {/* Work Experience Section */}
+                    {experiences.length > 0 && (
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                                    <Briefcase className="text-violet-400 w-6 h-6" />
+                                    Work Experience
+                                </h2>
+                            </div>
+                            <div className="flex flex-col gap-4">
+                                {experiences.map((exp) => (
+                                    <div key={exp.id} className="group relative overflow-hidden rounded-xl bg-surface-dark p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(139,92,246,0.15)] hover:border-violet-500/30 border border-[#2f333a]">
+                                        <div className="absolute right-0 top-0 h-24 w-24 bg-gradient-to-bl from-violet-500/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
+                                        <div className="flex flex-col sm:flex-row sm:items-start gap-4 z-10 relative">
+                                            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#151619] border border-[#2f333a] text-violet-400">
+                                                <Briefcase className="w-6 h-6" />
+                                            </div>
+                                            <div className="flex-grow">
+                                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                                                    <div>
+                                                        <h3 className="text-lg font-bold text-white group-hover:text-violet-400 transition-colors">
+                                                            {exp.position}
+                                                        </h3>
+                                                        <p className="text-sm text-text-muted">{exp.company}</p>
+                                                    </div>
+                                                    <span className="mt-1 sm:mt-0 rounded-full bg-[#151619] border border-[#2f333a] px-3 py-1 text-xs font-medium text-text-muted">
+                                                        {exp.startDate} — {exp.endDate || "Present"}
+                                                    </span>
+                                                </div>
+                                                <p className="text-sm text-text-muted leading-relaxed">{exp.description}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Education & Certifications Section - DYNAMIC */}
                     <section>

@@ -97,3 +97,44 @@ export async function deleteCertification(id: string) {
     return { success: false, error: "Gagal menghapus sertifikasi." };
   }
 }
+
+// --- WORK EXPERIENCE ACTIONS ---
+
+export async function getWorkExperiences() {
+  return await prisma.workExperience.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
+}
+
+export async function saveWorkExperience(data: any) {
+  const session = await auth();
+  if (!session) return { success: false, error: "Unauthorized" };
+
+  const { id, position, company, description, startDate, endDate } = data;
+  try {
+    await prisma.workExperience.upsert({
+      where: { id: id || 'new-exp' },
+      update: { position, company, description, startDate, endDate },
+      create: { position, company, description, startDate, endDate },
+    });
+    revalidatePath("/about");
+    revalidatePath("/admin/about");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: "Gagal menyimpan pengalaman kerja." };
+  }
+}
+
+export async function deleteWorkExperience(id: string) {
+  try {
+    const session = await auth();
+    if (!session) return { success: false, error: "Unauthorized" };
+    await prisma.workExperience.delete({ where: { id } });
+    revalidatePath("/about");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: "Gagal menghapus pengalaman kerja." };
+  }
+}

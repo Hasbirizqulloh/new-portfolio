@@ -172,7 +172,23 @@ model Certification {
 }
 
 // ------------------------------------------------------
-// 8. SITE SETTING ENTITY
+// 8. WORK EXPERIENCE ENTITY
+// ------------------------------------------------------
+model WorkExperience {
+  id          String   @id @default(uuid())
+  position    String              // e.g. "Backend Engineer"
+  company     String              // e.g. "Google"
+  description String?  @db.Text
+  startDate   String              // e.g. "Jan 2023"
+  endDate     String?             // null = masih bekerja
+  sortOrder   Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ------------------------------------------------------
+// 9. SITE SETTING ENTITY
 // ------------------------------------------------------
 model SiteSetting {
   id          String   @id @default(uuid())

@@ -1,4 +1,4 @@
-import { About, EducationItem, CertificationItem } from "@/components/sections/About";
+import { About, EducationItem, CertificationItem, WorkExperienceItem } from "@/components/sections/About";
 import prisma from "@/lib/prisma";
 
 export const metadata = {
@@ -11,6 +11,9 @@ export default async function AboutPage() {
         orderBy: { sortOrder: 'asc' }
     });
     const dbCertifications = await prisma.certification.findMany({
+        orderBy: { sortOrder: 'asc' }
+    });
+    const dbExperiences = await prisma.workExperience.findMany({
         orderBy: { sortOrder: 'asc' }
     });
     
@@ -58,14 +61,25 @@ export default async function AboutPage() {
         credentialUrl: c.credentialUrl,
     }));
 
+    const experiences: WorkExperienceItem[] = dbExperiences.map((exp: any) => ({
+        id: exp.id,
+        position: exp.position,
+        company: exp.company,
+        description: exp.description || "",
+        startDate: exp.startDate,
+        endDate: exp.endDate,
+    }));
+
     return (
         <main className="flex flex-col min-h-screen">
             <About 
                 settings={settings}
                 educations={educations} 
-                certifications={certifications} 
+                certifications={certifications}
+                experiences={experiences}
                 resumeUrl={resumeUrl}
             />
         </main>
     );
 }
+

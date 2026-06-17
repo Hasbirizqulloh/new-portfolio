@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { 
   getEducation, saveEducation, deleteEducation,
-  getCertifications, saveCertification, deleteCertification 
+  getCertifications, saveCertification, deleteCertification,
+  getWorkExperiences, saveWorkExperience, deleteWorkExperience 
 } from "../../actions/about";
 import { getSiteSettings, updateSiteSettings } from "../../actions/settings";
 import { 
@@ -17,17 +18,19 @@ import {
   Check,
   X,
   FileText,
+  Briefcase,
   Save
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/ui/Toast";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { EducationType, CertificationType } from "@/types/admin";
+import { EducationType, CertificationType, WorkExperienceType } from "@/types/admin";
 
 export default function AdminAboutPage() {
-  const [activeTab, setActiveTab] = useState<"texts" | "education" | "certification">("texts");
+  const [activeTab, setActiveTab] = useState<"texts" | "education" | "certification" | "experience">("texts");
   const [education, setEducation] = useState<EducationType[]>([]);
   const [certs, setCerts] = useState<CertificationType[]>([]);
+  const [experiences, setExperiences] = useState<WorkExperienceType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<any>({});
@@ -48,13 +51,15 @@ export default function AdminAboutPage() {
   // Confirm Delete State
   const [deleteConfirmEdu, setDeleteConfirmEdu] = useState<{ isOpen: boolean; id: string }>({ isOpen: false, id: "" });
   const [deleteConfirmCert, setDeleteConfirmCert] = useState<{ isOpen: boolean; id: string }>({ isOpen: false, id: "" });
+  const [deleteConfirmExp, setDeleteConfirmExp] = useState<{ isOpen: boolean; id: string }>({ isOpen: false, id: "" });
   const [isDeleting, setIsDeleting] = useState(false);
 
   const loadData = async () => {
     setIsLoading(true);
-    const [eduData, certData, settings] = await Promise.all([getEducation(), getCertifications(), getSiteSettings()]);
+    const [eduData, certData, expData, settings] = await Promise.all([getEducation(), getCertifications(), getWorkExperiences(), getSiteSettings()]);
     setEducation(eduData as unknown as EducationType[]);
     setCerts(certData as unknown as CertificationType[]);
+    setExperiences(expData as unknown as WorkExperienceType[]);
     
     if (Array.isArray(settings) && settings.length > 0) {
       const newTexts = { ...textsForm };
@@ -89,6 +94,16 @@ export default function AdminAboutPage() {
       success("Sertifikasi berhasil disimpan.");
     }
     else error(res.error || "Gagal menyimpan sertifikasi.");
+  };
+
+  const handleSaveExp = async (data: any) => {
+    const res = await saveWorkExperience(data);
+    if (res.success) { 
+      setEditingId(null); 
+      loadData(); 
+      success("Pengalaman kerja berhasil disimpan.");
+    }
+    else error(res.error || "Gagal menyimpan pengalaman kerja.");
   };
 
   const handleSaveTexts = async (e: React.FormEvent) => {
@@ -135,6 +150,19 @@ export default function AdminAboutPage() {
     setDeleteConfirmCert({ isOpen: false, id: "" });
   };
 
+  const executeDeleteExp = async () => {
+    setIsDeleting(true);
+    const res = await deleteWorkExperience(deleteConfirmExp.id);
+    if (res.success) {
+      success("Pengalaman kerja berhasil dihapus.");
+      loadData();
+    } else {
+      error(res.error || "Gagal menghapus pengalaman kerja.");
+    }
+    setIsDeleting(false);
+    setDeleteConfirmExp({ isOpen: false, id: "" });
+  };
+
   return (
     <div className="space-y-6">
         <header className="mb-12 text-center">
@@ -160,6 +188,12 @@ export default function AdminAboutPage() {
             className={`flex items-center gap-2 px-6 sm:px-8 py-3 rounded-lg transition-all whitespace-nowrap ${activeTab === "certification" ? "bg-primary text-background-dark font-bold" : "text-gray-400 hover:text-white"}`}
           >
             <Award className="w-5 h-5" /> Certifications
+          </button>
+          <button 
+            onClick={() => setActiveTab("experience")}
+            className={`flex items-center gap-2 px-6 sm:px-8 py-3 rounded-lg transition-all whitespace-nowrap ${activeTab === "experience" ? "bg-primary text-background-dark font-bold" : "text-gray-400 hover:text-white"}`}
+          >
+            <Briefcase className="w-5 h-5" /> Experience
           </button>
         </div>
 
@@ -312,7 +346,7 @@ export default function AdminAboutPage() {
                   ))}
                 </div>
               </>
-            ) : (
+            ) : activeTab === "certification" ? (
               <>
                 <button 
                   onClick={() => { setEditingId("new"); setEditForm({ name: "", issuer: "", issuedDate: "", credentialUrl: "", description: "" }); }}
@@ -347,7 +381,43 @@ export default function AdminAboutPage() {
                   ))}
                 </div>
               </>
-            )}
+            ) : activeTab === "experience" ? (
+              <>
+                <button 
+                  onClick={() => { setEditingId("new"); setEditForm({ position: "", company: "", description: "", startDate: "", endDate: "" }); }}
+                  className="w-full p-6 rounded-2xl border border-dashed border-white/10 text-gray-500 hover:border-violet-500 hover:text-violet-400 hover:bg-violet-500/5 transition-all flex items-center justify-center gap-2 group"
+                >
+                  <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" /> Add New Experience
+                </button>
+
+                <div className="grid grid-cols-1 gap-4">
+                  {editingId === "new" && (
+                    <ExpForm data={editForm} onChange={setEditForm} onSave={() => handleSaveExp(editForm)} onCancel={() => setEditingId(null)} />
+                  )}
+                  {experiences.map((exp) => (
+                    editingId === exp.id ? (
+                      <ExpForm key={exp.id} data={editForm} onChange={setEditForm} onSave={() => handleSaveExp(editForm)} onCancel={() => setEditingId(null)} />
+                    ) : (
+                      <div key={exp.id} className="p-6 bg-surface-dark rounded-2xl border border-white/5 flex items-start justify-between group hover:border-violet-500/20 transition-all">
+                        <div className="flex gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400"><Briefcase className="w-6 h-6" /></div>
+                          <div>
+                            <h3 className="font-bold text-white text-lg">{exp.position}</h3>
+                            <p className="text-violet-400">{exp.company}</p>
+                            <p className="text-xs text-gray-500 mt-1 font-mono">{exp.startDate} — {exp.endDate || "Present"}</p>
+                            {exp.description && <p className="text-sm text-gray-400 mt-2">{exp.description}</p>}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => { setEditingId(exp.id); setEditForm(exp); }} className="p-2 text-gray-500 hover:text-white"><Edit2 className="w-4 h-4" /></button>
+                          <button onClick={() => setDeleteConfirmExp({ isOpen: true, id: exp.id })} className="p-2 text-gray-500 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+                        </div>
+                      </div>
+                    )
+                  ))}
+                </div>
+              </>
+            ) : null}
           </div>
         )}
 
@@ -368,6 +438,16 @@ export default function AdminAboutPage() {
           confirmText="Hapus"
           onConfirm={executeDeleteCert}
           onCancel={() => setDeleteConfirmCert({ isOpen: false, id: "" })}
+          isLoading={isDeleting}
+        />
+
+        <ConfirmDialog
+          isOpen={deleteConfirmExp.isOpen}
+          title="Hapus Pengalaman Kerja"
+          message="Apakah Anda yakin ingin menghapus data pengalaman kerja ini?"
+          confirmText="Hapus"
+          onConfirm={executeDeleteExp}
+          onCancel={() => setDeleteConfirmExp({ isOpen: false, id: "" })}
           isLoading={isDeleting}
         />
       </div>
@@ -428,9 +508,46 @@ function CertForm({ data, onChange, onSave, onCancel }: any) {
           <input placeholder="https://..." value={data.credentialUrl || ""} onChange={e => onChange({...data, credentialUrl: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white font-mono text-sm" />
         </div>
       </div>
+      <div className="space-y-2">
+        <label className="text-xs text-gray-500 uppercase font-bold">Description</label>
+        <textarea rows={3} placeholder="Tell us more about this certification..." value={data.description || ""} onChange={e => onChange({...data, description: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white resize-none" />
+      </div>
       <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
         <button onClick={onCancel} className="px-4 py-2 text-gray-400 hover:text-white font-semibold">Cancel</button>
         <button onClick={onSave} className="flex items-center gap-2 px-6 py-2 bg-blue-500 text-white rounded-lg font-bold hover:scale-105 transition-all"><Check className="w-5 h-5" /> Save Changes</button>
+      </div>
+    </div>
+  );
+}
+
+function ExpForm({ data, onChange, onSave, onCancel }: any) {
+  return (
+    <div className="p-8 bg-background-dark border-2 border-violet-500/30 rounded-2xl space-y-6 shadow-2xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="text-xs text-gray-500 uppercase font-bold">Position / Role</label>
+          <input placeholder="e.g. Backend Engineer" value={data.position || ""} onChange={e => onChange({...data, position: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white" />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs text-gray-500 uppercase font-bold">Company</label>
+          <input placeholder="e.g. Google" value={data.company || ""} onChange={e => onChange({...data, company: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white" />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs text-gray-500 uppercase font-bold">Start Date</label>
+          <input placeholder="e.g. Jan 2023" value={data.startDate || ""} onChange={e => onChange({...data, startDate: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white" />
+        </div>
+        <div className="space-y-2">
+          <label className="text-xs text-gray-500 uppercase font-bold">End Date (Empty if Current)</label>
+          <input placeholder="e.g. Dec 2024" value={data.endDate || ""} onChange={e => onChange({...data, endDate: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <label className="text-xs text-gray-500 uppercase font-bold">Description</label>
+        <textarea rows={3} placeholder="Describe your responsibilities and achievements..." value={data.description || ""} onChange={e => onChange({...data, description: e.target.value})} className="w-full bg-surface-dark border border-white/10 p-3 rounded-lg text-white resize-none" />
+      </div>
+      <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+        <button onClick={onCancel} className="px-4 py-2 text-gray-400 hover:text-white font-semibold">Cancel</button>
+        <button onClick={onSave} className="flex items-center gap-2 px-6 py-2 bg-violet-500 text-white rounded-lg font-bold hover:scale-105 transition-all"><Check className="w-5 h-5" /> Save Changes</button>
       </div>
     </div>
   );
