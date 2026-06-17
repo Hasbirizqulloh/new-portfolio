@@ -16,7 +16,25 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
 
   return (
     <div>
-      <ProjectForm initialData={project} />
+      <ProjectForm initialData={{
+        ...project,
+        technologies: project.technologies ? project.technologies.map((t: any) => t.technologyId) : [],
+        challenges: project.challenges ? project.challenges.map((c: any) => ({
+          title: c.title,
+          challenge: c.challenge,
+          solution: c.solution
+        })) : [],
+        results: project.results ? project.results.map((r: any) => ({
+          metric: r.metric,
+          value: r.value,
+          color: r.color || "primary"
+        })) : [],
+        coverImageUrl: project.coverImageUrl || "",
+        liveDemoUrl: project.liveDemoUrl || "",
+        sourceCodeUrl: project.sourceCodeUrl || "",
+        architectureDescription: project.architectureDescription || "",
+        architectureImageUrl: project.architectureImageUrl || ""
+      }} />
     </div>
   );
 }

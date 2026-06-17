@@ -16,7 +16,10 @@ export default async function EditBlogPage({ params }: EditBlogPageProps) {
 
   return (
     <div>
-      <BlogForm initialData={blog} />
+      <BlogForm initialData={{
+        ...blog,
+        coverImageUrl: blog.coverImageUrl || ""
+      }} />
     </div>
   );
 }
