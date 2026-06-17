@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
  */
 export async function getAdminBlogs() {
   const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  if (!session) throw new Error("Unauthorized");
 
   try {
     return await prisma.blogPost.findMany({
@@ -69,6 +69,6 @@ export async function deleteBlog(id: string) {
  */
 export async function getBlogById(id: string) {
   const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  if (!session) throw new Error("Unauthorized");
   return await prisma.blogPost.findUnique({ where: { id } });
 }

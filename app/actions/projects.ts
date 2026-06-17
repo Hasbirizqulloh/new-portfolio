@@ -145,7 +145,7 @@ export async function saveProject(data: any) {
  */
 export async function getProjectById(id: string) {
   const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  if (!session) throw new Error("Unauthorized");
 
   return await prisma.project.findUnique({
     where: { id },
