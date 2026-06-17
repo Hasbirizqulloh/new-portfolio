@@ -10,7 +10,7 @@ import { MessageStatus } from "@prisma/client";
  */
 export async function getAdminMessages() {
   const session = await auth();
-  if (!session) return { success: false, error: "Unauthorized" };
+  if (!session) throw new Error("Unauthorized");
 
   try {
     return await prisma.contactMessage.findMany({

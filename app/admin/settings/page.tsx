@@ -15,8 +15,10 @@ export default function SettingsPage() {
     async function loadSettings() {
       try {
         const settings = await getSiteSettings();
-        const resume = settings.find((s: any) => s.key === "resumeUrl");
-        if (resume) setResumeUrl(resume.value);
+        if (Array.isArray(settings)) {
+          const resume = settings.find((s: any) => s.key === "resumeUrl");
+          if (resume) setResumeUrl(resume.value);
+        }
       } catch (err) {
         console.error(err);
       } finally {

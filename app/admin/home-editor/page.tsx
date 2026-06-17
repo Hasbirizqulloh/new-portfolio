@@ -30,7 +30,7 @@ export default function HomeEditorPage() {
     async function loadSettings() {
       try {
         const settings = await getSiteSettings();
-        if (settings && settings.length > 0) {
+        if (Array.isArray(settings) && settings.length > 0) {
           const newFormData = { ...formData };
           settings.forEach((s: any) => {
             if (s.key in newFormData) {
