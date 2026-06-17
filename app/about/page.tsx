@@ -40,7 +40,7 @@ export default async function AboutPage() {
 
     const resumeUrl = settings.resumeUrl || "#";
 
-    const educations: EducationItem[] = dbEducations.map((e) => ({
+    const educations: EducationItem[] = dbEducations.map((e: any) => ({
         id: e.id,
         degree: e.degree,
         institution: e.institution,
@@ -49,7 +49,7 @@ export default async function AboutPage() {
         endYear: e.endYear,
     }));
 
-    const certifications: CertificationItem[] = dbCertifications.map((c) => ({
+    const certifications: CertificationItem[] = dbCertifications.map((c: any) => ({
         id: c.id,
         name: c.name,
         issuer: c.issuer,
