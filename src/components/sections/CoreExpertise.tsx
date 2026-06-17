@@ -1,16 +1,18 @@
 import React from "react";
 import { Layers, Bot, Database } from "lucide-react";
 
-export function CoreExpertise() {
+interface CoreExpertiseProps {
+    settings?: Record<string, string>;
+}
+
+export function CoreExpertise({ settings }: CoreExpertiseProps) {
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Quote Section */}
             <section className="border-y border-[#2f333a] py-10 mb-20">
                 <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-6">
-                    <p className="text-xl text-text-main font-light leading-relaxed">
-                        &quot;Passionate about leveraging cutting-edge AI technologies to solve
-                        real-world problems. I combine robust engineering principles with
-                        data science to build products that matter.&quot;
+                    <p className="text-xl text-text-main font-light leading-relaxed whitespace-pre-wrap">
+                        {settings?.quoteText || `"Passionate about leveraging cutting-edge AI technologies to solve real-world problems. I combine robust engineering principles with data science to build products that matter."`}
                     </p>
                     <div className="flex flex-wrap justify-center gap-3">
                         {[

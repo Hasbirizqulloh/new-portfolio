@@ -29,6 +29,31 @@ export async function updateSiteSetting(key: string, value: string) {
   }
 }
 
+export async function updateSiteSettings(settings: { key: string; value: string }[]) {
+  const session = await auth();
+  if (!session) throw new Error("Unauthorized");
+
+  try {
+    // Use a transaction to update all settings
+    await prisma.$transaction(
+      settings.map((s) =>
+        prisma.siteSetting.upsert({
+          where: { key: s.key },
+          update: { value: s.value },
+          create: { key: s.key, value: s.value },
+        })
+      )
+    );
+
+    revalidatePath("/");
+    revalidatePath("/admin/home-editor");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update settings:", error);
+    return { success: false, error: "Gagal memperbarui pengaturan." };
+  }
+}
+
 export async function getSiteSettings() {
   const session = await auth();
   if (!session) throw new Error("Unauthorized");
@@ -39,5 +64,20 @@ export async function getSiteSettings() {
   } catch (error) {
     console.error("Failed to fetch settings:", error);
     return [];
+  }
+}
+
+export async function getPublicSiteSettings() {
+  try {
+    const settings = await prisma.siteSetting.findMany();
+    // Convert to a record object for easier access
+    const record: Record<string, string> = {};
+    settings.forEach(s => {
+      record[s.key] = s.value;
+    });
+    return record;
+  } catch (error) {
+    console.error("Failed to fetch public settings:", error);
+    return {};
   }
 }

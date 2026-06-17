@@ -13,16 +13,27 @@ import {
   Eye
 } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/components/ui/Toast";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { AdminBlog } from "@/types/admin";
 
 export default function AdminBlogPage() {
-  const [blogs, setBlogs] = useState<any[]>([]);
+  const [blogs, setBlogs] = useState<AdminBlog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { success, error } = useToast();
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; title: string }>({
+    isOpen: false,
+    id: "",
+    title: ""
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const loadBlogs = async () => {
     setIsLoading(true);
     const data = await getAdminBlogs();
-    setBlogs(data);
+    setBlogs(data as unknown as AdminBlog[]);
     setIsLoading(false);
   };
 
@@ -30,11 +41,21 @@ export default function AdminBlogPage() {
     loadBlogs();
   }, []);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (confirm(`Hapus artikel "${title}"?`)) {
-      const result = await deleteBlog(id);
-      if (result.success) loadBlogs();
+  const confirmDelete = (id: string, title: string) => {
+    setDeleteConfirm({ isOpen: true, id, title });
+  };
+
+  const executeDelete = async () => {
+    setIsDeleting(true);
+    const result = await deleteBlog(deleteConfirm.id);
+    if (result.success) {
+      success(`Artikel "${deleteConfirm.title}" berhasil dihapus.`);
+      loadBlogs();
+    } else {
+      error(result.error || "Gagal menghapus artikel.");
     }
+    setIsDeleting(false);
+    setDeleteConfirm({ isOpen: false, id: "", title: "" });
   };
 
   const filteredBlogs = blogs.filter(b => 
@@ -42,13 +63,9 @@ export default function AdminBlogPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background-dark p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="space-y-6">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <Link href="/admin/dashboard" className="text-sm text-gray-400 hover:text-primary flex items-center gap-2 mb-2">
-              <ArrowLeft className="w-4 h-4" /> Back
-            </Link>
             <h1 className="text-3xl font-bold text-white">Blog Manager</h1>
             <p className="text-gray-400">{blogs.length} articles found</p>
           </div>
@@ -94,13 +111,22 @@ export default function AdminBlogPage() {
                 <div className="flex items-center gap-2">
                   <Link href={`/blog/${blog.slug}`} target="_blank" className="p-2 text-gray-500 hover:text-white"><Eye className="w-5 h-5" /></Link>
                   <Link href={`/admin/blog/${blog.id}`} className="p-2 text-gray-500 hover:text-blue-500"><Edit2 className="w-5 h-5" /></Link>
-                  <button onClick={() => handleDelete(blog.id, blog.title)} className="p-2 text-gray-500 hover:text-red-500"><Trash2 className="w-5 h-5" /></button>
+                  <button onClick={() => confirmDelete(blog.id, blog.title)} className="p-2 text-gray-500 hover:text-red-500"><Trash2 className="w-5 h-5" /></button>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
+
+        <ConfirmDialog
+          isOpen={deleteConfirm.isOpen}
+          title="Hapus Artikel"
+          message={`Apakah Anda yakin ingin menghapus artikel "${deleteConfirm.title}"? Tindakan ini tidak dapat dibatalkan.`}
+          confirmText="Hapus"
+          onConfirm={executeDelete}
+          onCancel={() => setDeleteConfirm({ isOpen: false, id: "", title: "" })}
+          isLoading={isDeleting}
+        />
     </div>
   );
 }

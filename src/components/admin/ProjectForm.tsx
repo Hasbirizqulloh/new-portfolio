@@ -16,18 +16,21 @@ import {
   Loader2
 } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/components/ui/Toast";
+import { ProjectFormData } from "@/types/admin";
 
 interface ProjectFormProps {
-  initialData?: any;
+  initialData?: ProjectFormData;
 }
 
 export function ProjectForm({ initialData }: ProjectFormProps) {
   const router = useRouter();
+  const { success, error } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [allTechs, setAllTechs] = useState<any[]>([]);
   
   // State Form
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ProjectFormData>({
     id: initialData?.id || null,
     title: initialData?.title || "",
     slug: initialData?.slug || "",
@@ -39,10 +42,12 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     sourceCodeUrl: initialData?.sourceCodeUrl || "",
     architectureDescription: initialData?.architectureDescription || "",
     architectureImageUrl: initialData?.architectureImageUrl || "",
-    technologies: initialData?.technologies?.map((t: any) => t.technologyId) || [],
+    technologies: initialData?.technologies || [],
     challenges: initialData?.challenges || [{ title: "", challenge: "", solution: "" }],
     results: initialData?.results || [{ metric: "", value: "", color: "primary" }]
   });
+
+  const [isAutoSlug, setIsAutoSlug] = useState(!initialData?.slug);
 
   useEffect(() => {
     async function loadTechs() {
@@ -54,7 +59,24 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      
+      // Auto-generate slug if title changes and auto-slug is active
+      if (name === "title" && isAutoSlug) {
+        newData.slug = value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "");
+      }
+      
+      return newData;
+    });
+
+    if (name === "slug") {
+      setIsAutoSlug(false);
+    }
   };
 
   // Manage Technologies
@@ -116,10 +138,11 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     const result = await saveProject(formData);
     
     if (result.success) {
+      success("Proyek berhasil disimpan!");
       router.push("/admin/projects");
       router.refresh();
     } else {
-      alert(result.error);
+      error(result.error || "Gagal menyimpan proyek.");
     }
     setIsLoading(false);
   };
@@ -284,6 +307,12 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                   placeholder="https://..."
                   className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all font-mono text-sm"
                 />
+                {formData.architectureImageUrl && (
+                  <div className="mt-2 relative aspect-video rounded-lg overflow-hidden border border-white/10 bg-surface-dark">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={formData.architectureImageUrl} alt="Architecture Preview" className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -321,6 +350,12 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400">Cover Image URL</label>
                 <input name="coverImageUrl" value={formData.coverImageUrl} onChange={handleChange} className="w-full px-3 py-2 rounded bg-background-dark border border-white/10 text-white text-sm" />
+                {formData.coverImageUrl && (
+                  <div className="mt-2 relative aspect-video rounded-lg overflow-hidden border border-white/10 bg-surface-dark">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={formData.coverImageUrl} alt="Cover Preview" className="object-cover w-full h-full" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                  </div>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400">Live Demo URL</label>

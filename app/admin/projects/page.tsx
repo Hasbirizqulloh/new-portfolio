@@ -15,17 +15,28 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useToast } from "@/components/ui/Toast";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { AdminProject } from "@/types/admin";
 
 export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<AdminProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  
+  const { success, error } = useToast();
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; id: string; title: string }>({
+    isOpen: false,
+    id: "",
+    title: ""
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const loadProjects = async () => {
     setIsLoading(true);
     const data = await getAdminProjects();
-    setProjects(data);
+    setProjects(data as unknown as AdminProject[]);
     setIsLoading(false);
   };
 
@@ -33,15 +44,21 @@ export default function AdminProjectsPage() {
     loadProjects();
   }, []);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (confirm(`Apakah Anda yakin ingin menghapus proyek "${title}"?`)) {
-      const result = await deleteProject(id);
-      if (result.success) {
-        loadProjects();
-      } else {
-        alert(result.error);
-      }
+  const confirmDelete = (id: string, title: string) => {
+    setDeleteConfirm({ isOpen: true, id, title });
+  };
+
+  const executeDelete = async () => {
+    setIsDeleting(true);
+    const result = await deleteProject(deleteConfirm.id);
+    if (result.success) {
+      success(`Proyek "${deleteConfirm.title}" berhasil dihapus.`);
+      loadProjects();
+    } else {
+      error(result.error || "Gagal menghapus proyek.");
     }
+    setIsDeleting(false);
+    setDeleteConfirm({ isOpen: false, id: "", title: "" });
   };
 
   const filteredProjects = projects.filter(p => 
@@ -156,8 +173,8 @@ export default function AdminProjectsPage() {
                               {t.technology.name}
                             </span>
                           ))}
-                          {project.technologies?.length > 3 && (
-                            <span className="text-[10px] text-gray-600">+{project.technologies.length - 3}</span>
+                          {(project.technologies?.length || 0) > 3 && (
+                            <span className="text-[10px] text-gray-600">+{(project.technologies?.length || 0) - 3}</span>
                           )}
                         </div>
                       </td>
@@ -177,10 +194,11 @@ export default function AdminProjectsPage() {
                             <Edit2 className="w-4 h-4" />
                           </Link>
                           <button 
-                            onClick={() => handleDelete(project.id, project.title)}
-                            className="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-all"
+                            onClick={() => confirmDelete(project.id, project.title)}
+                            className="p-2 bg-surface-dark border border-white/10 rounded-lg text-gray-400 hover:text-red-500 hover:border-red-500/50 hover:bg-red-500/10 transition-all"
+                            title="Delete project"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
                       </td>
@@ -212,7 +230,7 @@ export default function AdminProjectsPage() {
                     <div className="flex items-center justify-between pt-4 border-t border-white/5">
                       <span className="text-[10px] text-gray-500 uppercase tracking-widest">{project.category}</span>
                       <button 
-                        onClick={() => handleDelete(project.id, project.title)}
+                        onClick={() => confirmDelete(project.id, project.title)}
                         className="text-xs text-gray-500 hover:text-red-500 transition-colors flex items-center gap-1"
                       >
                         <Trash2 className="w-3 h-3" /> Delete
@@ -243,6 +261,16 @@ export default function AdminProjectsPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Hapus Proyek"
+        message={`Apakah Anda yakin ingin menghapus proyek "${deleteConfirm.title}"? Tindakan ini tidak dapat dibatalkan.`}
+        confirmText="Hapus"
+        onConfirm={executeDelete}
+        onCancel={() => setDeleteConfirm({ isOpen: false, id: "", title: "" })}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }

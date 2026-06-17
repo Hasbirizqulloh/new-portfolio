@@ -45,11 +45,16 @@ export async function saveEducation(data: any) {
 }
 
 export async function deleteEducation(id: string) {
-  const session = await auth();
-  if (!session) throw new Error("Unauthorized");
-  await prisma.education.delete({ where: { id } });
-  revalidatePath("/about");
-  return { success: true };
+  try {
+    const session = await auth();
+    if (!session) return { success: false, error: "Unauthorized" };
+    await prisma.education.delete({ where: { id } });
+    revalidatePath("/about");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: "Gagal menghapus pendidikan." };
+  }
 }
 
 // --- CERTIFICATION ACTIONS ---
@@ -81,9 +86,14 @@ export async function saveCertification(data: any) {
 }
 
 export async function deleteCertification(id: string) {
-  const session = await auth();
-  if (!session) throw new Error("Unauthorized");
-  await prisma.certification.delete({ where: { id } });
-  revalidatePath("/about");
-  return { success: true };
+  try {
+    const session = await auth();
+    if (!session) return { success: false, error: "Unauthorized" };
+    await prisma.certification.delete({ where: { id } });
+    revalidatePath("/about");
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false, error: "Gagal menghapus sertifikasi." };
+  }
 }

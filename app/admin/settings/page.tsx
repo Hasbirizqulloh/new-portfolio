@@ -43,22 +43,15 @@ export default function SettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background-dark flex items-center justify-center">
+      <div className="flex justify-center py-20">
         <Loader2 className="w-8 h-8 text-primary animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background-dark p-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="space-y-6">
         <div className="mb-8">
-          <Link
-            href="/admin/dashboard"
-            className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-primary transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> Kembali ke Dashboard
-          </Link>
           <h1 className="text-3xl font-bold text-white mt-4">Site Settings</h1>
           <p className="text-gray-400">Kelola konfigurasi global aplikasi Anda</p>
         </div>
@@ -106,7 +99,6 @@ export default function SettingsPage() {
             </button>
           </div>
         </form>
-      </div>
     </div>
   );
 }

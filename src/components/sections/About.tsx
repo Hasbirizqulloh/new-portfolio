@@ -35,12 +35,13 @@ export type CertificationItem = {
 };
 
 interface AboutProps {
+    settings?: Record<string, string>;
     educations: EducationItem[];
     certifications: CertificationItem[];
     resumeUrl: string;
 }
 
-export function About({ educations, certifications, resumeUrl }: AboutProps) {
+export function About({ settings, educations, certifications, resumeUrl }: AboutProps) {
     return (
         <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
@@ -69,14 +70,14 @@ export function About({ educations, certifications, resumeUrl }: AboutProps) {
                                 <MapPin className="text-primary mt-0.5 w-5 h-5" />
                                 <div>
                                     <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">Location</p>
-                                    <p className="text-sm text-text-main font-medium">Indonesia</p>
+                                    <p className="text-sm text-text-main font-medium">{settings?.aboutLocation || "Indonesia"}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <Terminal className="text-primary mt-0.5 w-5 h-5" />
                                 <div>
                                     <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">Focus</p>
-                                    <p className="text-sm text-text-main font-medium">AI Integration, System Architecture</p>
+                                    <p className="text-sm text-text-main font-medium">{settings?.aboutFocus || "AI Integration, System Architecture"}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
@@ -84,9 +85,11 @@ export function About({ educations, certifications, resumeUrl }: AboutProps) {
                                 <div>
                                     <p className="text-xs font-semibold text-text-muted uppercase tracking-wider">Core Stack</p>
                                     <div className="flex flex-wrap gap-2 mt-1">
-                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">Python</span>
-                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">React & Next.js</span>
-                                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">TypeScript</span>
+                                        {(settings?.aboutCoreStack || "Python, React & Next.js, TypeScript").split(',').map((stack, idx) => (
+                                            <span key={idx} className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
+                                                {stack.trim()}
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
@@ -134,25 +137,18 @@ export function About({ educations, certifications, resumeUrl }: AboutProps) {
                             <span className="text-sm font-bold uppercase tracking-widest">About Me</span>
                         </div>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
-                            Bridging the gap between{" "}
+                            {settings?.aboutTitleMain || "Bridging the gap between"}{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">
-                                complex data
+                                {settings?.aboutTitleHighlight || "complex data"}
                             </span>{" "}
-                            and intuitive experiences.
+                            {settings?.aboutTitleSuffix || "and intuitive experiences."}
                         </h1>
                         <div className="prose prose-invert prose-lg max-w-none text-text-muted">
-                            <p className="mb-4">
-                                I am a multidisciplinary engineer obsessed with the intersection
-                                of scalable backend systems and intelligent user interfaces. In
-                                a world awash with data, my mission is to build tools that not
-                                only process information but make it actionable and accessible.
+                            <p className="mb-4 whitespace-pre-wrap">
+                                {settings?.aboutDescription1 || "I am a multidisciplinary engineer obsessed with the intersection of scalable backend systems and intelligent user interfaces. In a world awash with data, my mission is to build tools that not only process information but make it actionable and accessible."}
                             </p>
-                            <p>
-                                With experience in distributed systems and a recent deep dive
-                                into Large Language Model integration, I help companies
-                                transition from &quot;AI-curious&quot; to &quot;AI-native.&quot; I believe that the
-                                best code is the code that solves human problems with elegant
-                                simplicity.
+                            <p className="whitespace-pre-wrap">
+                                {settings?.aboutDescription2 || "With experience in distributed systems and a recent deep dive into Large Language Model integration, I help companies transition from \"AI-curious\" to \"AI-native.\" I believe that the best code is the code that solves human problems with elegant simplicity."}
                             </p>
                         </div>
                     </section>
@@ -223,7 +219,7 @@ export function About({ educations, certifications, resumeUrl }: AboutProps) {
                     {/* Skills / Tech Cloud */}
                     <section className="mt-8 pt-8 border-t border-[#2f333a]">
                         <h2 className="text-lg font-bold text-white mb-6">
-                            Technical Arsenal
+                            Technical Stack
                         </h2>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div className="p-4 rounded-lg bg-[#151619] border border-[#2f333a] hover:border-primary/50 transition-colors">

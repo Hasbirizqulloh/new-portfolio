@@ -15,10 +15,8 @@ export default async function EditBlogPage({ params }: EditBlogPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background-dark p-8">
-      <div className="max-w-7xl mx-auto">
-        <BlogForm initialData={blog} />
-      </div>
+    <div>
+      <BlogForm initialData={blog} />
     </div>
   );
 }

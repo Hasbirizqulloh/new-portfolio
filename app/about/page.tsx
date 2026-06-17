@@ -14,11 +14,31 @@ export default async function AboutPage() {
         orderBy: { sortOrder: 'asc' }
     });
     
-    // Ambil URL Resume dari tabel settings
-    const resumeSetting = await prisma.siteSetting.findUnique({
-        where: { key: 'resumeUrl' }
+    // Ambil settings untuk about page
+    const settingsRaw = await prisma.siteSetting.findMany({
+        where: {
+            key: {
+                in: [
+                    'resumeUrl',
+                    'aboutTitleMain',
+                    'aboutTitleHighlight',
+                    'aboutTitleSuffix',
+                    'aboutDescription1',
+                    'aboutDescription2',
+                    'aboutLocation',
+                    'aboutFocus',
+                    'aboutCoreStack'
+                ]
+            }
+        }
     });
-    const resumeUrl = resumeSetting?.value || "#";
+
+    const settings = settingsRaw.reduce((acc, curr) => {
+        acc[curr.key] = curr.value;
+        return acc;
+    }, {} as Record<string, string>);
+
+    const resumeUrl = settings.resumeUrl || "#";
 
     const educations: EducationItem[] = dbEducations.map((e) => ({
         id: e.id,
@@ -41,6 +61,7 @@ export default async function AboutPage() {
     return (
         <main className="flex flex-col min-h-screen">
             <About 
+                settings={settings}
                 educations={educations} 
                 certifications={certifications} 
                 resumeUrl={resumeUrl}
