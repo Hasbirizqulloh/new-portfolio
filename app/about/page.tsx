@@ -33,7 +33,7 @@ export default async function AboutPage() {
         }
     });
 
-    const settings = settingsRaw.reduce((acc, curr) => {
+    const settings = settingsRaw.reduce((acc: Record<string, string>, curr: { key: string; value: string }) => {
         acc[curr.key] = curr.value;
         return acc;
     }, {} as Record<string, string>);
