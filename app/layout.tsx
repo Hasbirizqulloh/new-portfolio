@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavbarWrapper } from "@/components/layout/NavbarWrapper";
 import { FooterWrapper } from "@/components/layout/FooterWrapper";
+import { BottomNavWrapper } from "@/components/layout/BottomNavWrapper";
 
 import { Providers } from "@/components/Providers";
 
@@ -33,8 +34,11 @@ export default function RootLayout({
       >
         <Providers>
           <NavbarWrapper />
-          {children}
+          <div className="pb-20 md:pb-0">
+            {children}
+          </div>
           <FooterWrapper />
+          <BottomNavWrapper />
         </Providers>
       </body>
     </html>

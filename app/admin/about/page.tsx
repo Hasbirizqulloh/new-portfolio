@@ -56,7 +56,7 @@ export default function AdminAboutPage() {
     setEducation(eduData as unknown as EducationType[]);
     setCerts(certData as unknown as CertificationType[]);
     
-    if (settings && settings.length > 0) {
+    if (Array.isArray(settings) && settings.length > 0) {
       const newTexts = { ...textsForm };
       settings.forEach((s: any) => {
         if (s.key in newTexts) {
