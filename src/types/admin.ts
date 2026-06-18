@@ -10,6 +10,9 @@ export interface ProjectFormData {
   coverImageUrl: string;
   liveDemoUrl: string;
   sourceCodeUrl: string;
+  year: string;
+  platform: string;
+  client: string;
   architectureDescription: string;
   architectureImageUrl: string;
   technologies: string[];

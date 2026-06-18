@@ -55,7 +55,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                                 {project.category}
                             </span>
                             <span className="px-3 py-1 rounded-full bg-surface-dark text-text-muted text-xs font-bold uppercase tracking-wider border border-[#2f333a]">
-                                2023
+                                {project.year || "2024"}
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
@@ -91,12 +91,12 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                     <div className="absolute bottom-6 left-6 hidden md:flex items-center gap-6 p-4 rounded-xl bg-surface-dark/90 backdrop-blur border border-[#2f333a]">
                         <div>
                             <p className="text-xs text-text-muted uppercase tracking-wide">Platform</p>
-                            <p className="text-white font-bold">Web / Desktop</p>
+                            <p className="text-white font-bold">{project.platform || "Web / Mobile"}</p>
                         </div>
                         <div className="w-px h-8 bg-[#2f333a]"></div>
                         <div>
                             <p className="text-xs text-text-muted uppercase tracking-wide">Client</p>
-                            <p className="text-white font-bold">Open Research Lab</p>
+                            <p className="text-white font-bold">{project.client || "Personal"}</p>
                         </div>
                     </div>
                 </div>
@@ -198,38 +198,28 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                             Tech Stack
                         </h3>
                         <div className="space-y-6">
-                            <div>
-                                <p className="text-xs font-bold text-gray-500 uppercase mb-3">Frontend</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {project.tech.map((t) => (
-                                        <div key={t} className="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-[#2f333a] text-sm text-gray-300">
-                                            <span className="w-2 h-2 rounded-full bg-blue-400"></span> {t}
+                            {['Frontend', 'Backend', 'DevOps', 'Data', 'Other'].map(category => {
+                                const categoryTechs = project.tech.filter((t: any) => t.category === category);
+                                if (categoryTechs.length === 0) return null;
+                                
+                                return (
+                                    <div key={category}>
+                                        <p className="text-xs font-bold text-gray-500 uppercase mb-3">{category}</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {categoryTechs.map((t: any) => (
+                                                <div key={t.name} className="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-[#2f333a] text-sm text-gray-300">
+                                                    <span className={`w-2 h-2 rounded-full ${
+                                                        category === 'Frontend' ? 'bg-blue-400' : 
+                                                        category === 'Backend' ? 'bg-yellow-400' : 
+                                                        category === 'DevOps' ? 'bg-green-400' : 'bg-primary'
+                                                    }`}></span> 
+                                                    {t.name}
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-gray-500 uppercase mb-3">Backend</p>
-                                <div className="flex flex-wrap gap-2">
-                                    <div className="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-[#2f333a] text-sm text-gray-300">
-                                        <span className="w-2 h-2 rounded-full bg-yellow-400"></span> Python
                                     </div>
-                                    <div className="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-[#2f333a] text-sm text-gray-300">
-                                        <span className="w-2 h-2 rounded-full bg-green-400"></span> FastAPI
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <p className="text-xs font-bold text-gray-500 uppercase mb-3">DevOps</p>
-                                <div className="flex flex-wrap gap-2">
-                                    <div className="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-[#2f333a] text-sm text-gray-300">
-                                        <Server className="w-4 h-4 text-blue-500" /> Docker
-                                    </div>
-                                    <div className="flex items-center gap-2 px-3 py-2 rounded bg-background-dark border border-[#2f333a] text-sm text-gray-300">
-                                        <MonitorSmartphone className="w-4 h-4 text-white" /> AWS
-                                    </div>
-                                </div>
-                            </div>
+                                );
+                            })}
                         </div>
                     </div>
 

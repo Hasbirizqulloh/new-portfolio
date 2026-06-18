@@ -42,7 +42,13 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         image: dbProject.coverImageUrl || "",
         liveDemoUrl: dbProject.liveDemoUrl || null,
         sourceCodeUrl: dbProject.sourceCodeUrl || null,
-        tech: dbProject.technologies.map(t => t.technology.name),
+        year: dbProject.year,
+        platform: dbProject.platform,
+        client: dbProject.client,
+        tech: dbProject.technologies.map(t => ({
+            name: t.technology.name,
+            category: t.technology.category || "Other"
+        })),
         architectureDescription: dbProject.architectureDescription || "The system follows a client-server architecture designed for heavy computational offloading. The backend handles model parsing and simplification, while the frontend focuses on high-performance WebGL rendering.",
         architectureImageUrl: dbProject.architectureImageUrl,
         challenges: dbProject.challenges.map(c => ({

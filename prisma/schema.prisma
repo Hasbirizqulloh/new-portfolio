@@ -23,6 +23,11 @@ model Project {
   liveDemoUrl             String?
   sourceCodeUrl           String?
   
+  // Dynamic Project Metadata
+  year                    String?
+  platform                String?
+  client                  String?
+  
   // Dynamic Architecture & System Design
   architectureDescription String?            @db.Text
   architectureImageUrl    String?
@@ -45,6 +50,7 @@ model Project {
 model Technology {
   id        String             @id @default(uuid())
   name      String             @unique
+  category  String?            @default("Other") // e.g., Frontend, Backend, DevOps, Data
   iconType  String?            // Generic icon name (e.g. "lucide-react")
   
   // Relations

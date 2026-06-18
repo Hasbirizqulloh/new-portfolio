@@ -29,6 +29,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [allTechs, setAllTechs] = useState<any[]>([]);
   const [newTechName, setNewTechName] = useState("");
+  const [newTechCategory, setNewTechCategory] = useState("Frontend");
   const [isAddingTech, setIsAddingTech] = useState(false);
   
   // State Form
@@ -38,10 +39,13 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     slug: initialData?.slug || "",
     description: initialData?.description || "",
     content: initialData?.content || "",
-    category: initialData?.category || "Web Development",
+    category: initialData?.category || "Fullstack",
     coverImageUrl: initialData?.coverImageUrl || "",
     liveDemoUrl: initialData?.liveDemoUrl || "",
     sourceCodeUrl: initialData?.sourceCodeUrl || "",
+    year: initialData?.year || new Date().getFullYear().toString(),
+    platform: initialData?.platform || "Web / Desktop",
+    client: initialData?.client || "Personal Project",
     architectureDescription: initialData?.architectureDescription || "",
     architectureImageUrl: initialData?.architectureImageUrl || "",
     technologies: initialData?.technologies || [],
@@ -95,7 +99,7 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
     if (!newTechName.trim()) return;
     setIsAddingTech(true);
     
-    const res = await createTechnology(newTechName.trim());
+    const res = await createTechnology(newTechName.trim(), newTechCategory);
     if (res.success && res.technology) {
       setAllTechs(prev => {
         // Prevent duplicate in local state
@@ -232,6 +236,39 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
               </div>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Year</label>
+                <input 
+                  name="year" 
+                  value={formData.year} 
+                  onChange={handleChange} 
+                  placeholder="e.g. 2023"
+                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Platform</label>
+                <input 
+                  name="platform" 
+                  value={formData.platform} 
+                  onChange={handleChange} 
+                  placeholder="e.g. Web / Desktop"
+                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-400">Client</label>
+                <input 
+                  name="client" 
+                  value={formData.client} 
+                  onChange={handleChange} 
+                  placeholder="e.g. Open Research Lab"
+                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-400">Short Description</label>
               <textarea 
@@ -353,23 +390,16 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400">Category</label>
-                <input 
+                <select 
                   name="category" 
                   value={formData.category} 
                   onChange={handleChange}
-                  list="project-categories"
-                  placeholder="e.g. Web Development"
-                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all"
-                />
-                <datalist id="project-categories">
-                  <option value="Web Development" />
-                  <option value="AI & Machine Learning" />
-                  <option value="Data Engineering" />
-                  <option value="Mobile Development" />
-                  <option value="DevOps & Cloud" />
-                  <option value="Open Source" />
-                  <option value="Hackathon" />
-                </datalist>
+                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none appearance-none"
+                >
+                  <option value="Fullstack">Fullstack</option>
+                  <option value="AI / ML">AI / ML</option>
+                  <option value="Data">Data</option>
+                </select>
               </div>
             </div>
           </section>
@@ -407,15 +437,25 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             <h2 className="font-bold text-white">Tech Stack</h2>
             
             {/* Add New Tech Input */}
-            <div className="flex gap-2 mb-2">
+            <div className="flex gap-2 mb-4">
               <input 
                 type="text" 
-                placeholder="Add new tech (e.g. Go, LLMs)" 
+                placeholder="New tech (e.g. Go, LLMs)" 
                 value={newTechName}
                 onChange={(e) => setNewTechName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddNewTech())}
-                className="flex-grow px-3 py-2 rounded-lg bg-background-dark border border-white/10 text-white text-sm outline-none focus:border-primary/50"
+                className="flex-grow px-3 py-2 rounded-lg bg-background-dark border border-white/10 text-white text-sm outline-none focus:border-primary/50 w-1/2"
               />
+              <select
+                value={newTechCategory}
+                onChange={(e) => setNewTechCategory(e.target.value)}
+                className="w-1/3 px-3 py-2 rounded-lg bg-background-dark border border-white/10 text-white text-sm outline-none"
+              >
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+                <option value="DevOps">DevOps</option>
+                <option value="Other">Other</option>
+              </select>
               <button 
                 type="button" 
                 onClick={handleAddNewTech}
@@ -427,21 +467,33 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto p-1">
-              {allTechs.map((tech) => (
-                <button
-                  key={tech.id}
-                  type="button"
-                  onClick={() => toggleTech(tech.id)}
-                  className={`px-3 py-1 rounded-full text-xs transition-all border ${
-                    formData.technologies.includes(tech.id)
-                      ? "bg-primary text-background-dark border-primary font-bold"
-                      : "bg-background-dark text-gray-500 border-white/10 hover:border-white/30"
-                  }`}
-                >
-                  {tech.name}
-                </button>
-              ))}
+            <div className="space-y-4 max-h-[300px] overflow-y-auto p-1 pr-2 custom-scrollbar">
+              {['Frontend', 'Backend', 'DevOps', 'Other'].map(category => {
+                const categoryTechs = allTechs.filter(t => t.category === category || (!t.category && category === 'Other'));
+                if (categoryTechs.length === 0) return null;
+                
+                return (
+                  <div key={category} className="space-y-2">
+                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">{category}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {categoryTechs.map((tech) => (
+                        <button
+                          key={tech.id}
+                          type="button"
+                          onClick={() => toggleTech(tech.id)}
+                          className={`px-3 py-1 rounded-full text-xs transition-all border ${
+                            formData.technologies.includes(tech.id)
+                              ? "bg-primary text-background-dark border-primary font-bold"
+                              : "bg-background-dark text-gray-500 border-white/10 hover:border-white/30"
+                          }`}
+                        >
+                          {tech.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </section>
 

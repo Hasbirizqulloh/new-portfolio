@@ -65,11 +65,14 @@ export async function saveProject(data: any) {
     coverImageUrl, 
     liveDemoUrl, 
     sourceCodeUrl,
+    year,
+    platform,
+    client,
     architectureDescription,
     architectureImageUrl,
-    technologies, // Array ID teknologi
-    challenges, // Array objek { title, challenge, solution }
-    results // Array objek { metric, value, color }
+    technologies,
+    challenges,
+    results
   } = data;
 
   try {
@@ -80,11 +83,13 @@ export async function saveProject(data: any) {
         update: {
           title, slug, description, content, category, 
           coverImageUrl, liveDemoUrl, sourceCodeUrl,
+          year, platform, client,
           architectureDescription, architectureImageUrl
         },
         create: {
           title, slug, description, content, category, 
           coverImageUrl, liveDemoUrl, sourceCodeUrl,
+          year, platform, client,
           architectureDescription, architectureImageUrl
         }
       });
@@ -169,16 +174,20 @@ export async function getAllTechnologies() {
 /**
  * Membuat teknologi baru secara dinamis
  */
-export async function createTechnology(name: string) {
+export async function createTechnology(name: string, category: string = "Other") {
   const session = await auth();
   if (!session) return { success: false, error: "Unauthorized" };
 
   try {
     const existing = await prisma.technology.findUnique({ where: { name } });
-    if (existing) return { success: true, technology: existing };
+    if (existing) {
+      // If it exists but has a different category, maybe update it? 
+      // For now, just return existing
+      return { success: true, technology: existing };
+    }
 
     const newTech = await prisma.technology.create({
-      data: { name }
+      data: { name, category }
     });
     return { success: true, technology: newTech };
   } catch (error: any) {

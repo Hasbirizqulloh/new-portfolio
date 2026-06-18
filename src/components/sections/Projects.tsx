@@ -16,7 +16,7 @@ export type Project = {
     tech: string[];
 };
 
-const filters = ["All Projects", "Fullstack", "AI / ML", "Data Eng"];
+const filters = ["All Projects", "Fullstack", "AI / ML", "Data"];
 
 export function Projects({ initialProjects }: { initialProjects: Project[] }) {
     const [activeFilter, setActiveFilter] = useState("All Projects");
