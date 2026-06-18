@@ -32,6 +32,9 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
         coverImageUrl: project.coverImageUrl || "",
         liveDemoUrl: project.liveDemoUrl || "",
         sourceCodeUrl: project.sourceCodeUrl || "",
+        year: project.year || "",
+        platform: project.platform || "",
+        client: project.client || "",
         architectureDescription: project.architectureDescription || "",
         architectureImageUrl: project.architectureImageUrl || ""
       }} />

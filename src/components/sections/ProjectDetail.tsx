@@ -14,7 +14,10 @@ interface ProjectDetailProps {
         image: string;
         liveDemoUrl: string | null;
         sourceCodeUrl: string | null;
-        tech: string[];
+        year?: string | null;
+        platform?: string | null;
+        client?: string | null;
+        tech: { name: string; category: string }[];
         architectureDescription?: string;
         architectureImageUrl?: string | null;
         challenges: {
