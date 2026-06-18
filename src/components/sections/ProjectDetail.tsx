@@ -4,6 +4,7 @@ import React from "react";
 import { ArrowLeft, Rocket, Code, FileText, Component, Lightbulb, MonitorSmartphone, Server, Database, TrendingUp, Folder, Star, GitFork, ExternalLink, Github, Mail, Linkedin, Copy } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 interface ProjectDetailProps {
     project: {
         id: string;
@@ -112,8 +113,8 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                             <FileText className="text-primary w-6 h-6" />
                             Project Overview
                         </h2>
-                        <div className="prose prose-invert prose-lg text-text-muted leading-relaxed max-w-none whitespace-pre-line">
-                            {project.content}
+                        <div className="prose prose-invert prose-lg text-text-muted leading-relaxed max-w-none">
+                            <ReactMarkdown>{project.content}</ReactMarkdown>
                         </div>
                     </section>
 
