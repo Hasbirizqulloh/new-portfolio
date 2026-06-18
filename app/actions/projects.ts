@@ -165,3 +165,24 @@ export async function getAllTechnologies() {
     orderBy: { name: 'asc' }
   });
 }
+
+/**
+ * Membuat teknologi baru secara dinamis
+ */
+export async function createTechnology(name: string) {
+  const session = await auth();
+  if (!session) return { success: false, error: "Unauthorized" };
+
+  try {
+    const existing = await prisma.technology.findUnique({ where: { name } });
+    if (existing) return { success: true, technology: existing };
+
+    const newTech = await prisma.technology.create({
+      data: { name }
+    });
+    return { success: true, technology: newTech };
+  } catch (error: any) {
+    console.error("Error creating technology:", error);
+    return { success: false, error: error.message };
+  }
+}

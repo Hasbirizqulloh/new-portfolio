@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { saveProject, getAllTechnologies } from "../../../app/actions/projects";
+import { saveProject, getAllTechnologies, createTechnology } from "../../../app/actions/projects";
 import { 
   Save, 
   ArrowLeft, 
@@ -28,6 +28,8 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
   const { success, error } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [allTechs, setAllTechs] = useState<any[]>([]);
+  const [newTechName, setNewTechName] = useState("");
+  const [isAddingTech, setIsAddingTech] = useState(false);
   
   // State Form
   const [formData, setFormData] = useState<ProjectFormData>({
@@ -87,6 +89,32 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
         ? prev.technologies.filter((t: string) => t !== id)
         : [...prev.technologies, id]
     }));
+  };
+
+  const handleAddNewTech = async () => {
+    if (!newTechName.trim()) return;
+    setIsAddingTech(true);
+    
+    const res = await createTechnology(newTechName.trim());
+    if (res.success && res.technology) {
+      setAllTechs(prev => {
+        // Prevent duplicate in local state
+        if (prev.find(t => t.id === res.technology.id)) return prev;
+        return [...prev, res.technology].sort((a, b) => a.name.localeCompare(b.name));
+      });
+      // Automatically select the newly created tech
+      setFormData(prev => ({
+        ...prev,
+        technologies: prev.technologies.includes(res.technology.id) 
+          ? prev.technologies 
+          : [...prev.technologies, res.technology.id]
+      }));
+      setNewTechName("");
+      success(`Added ${res.technology.name} to technologies!`);
+    } else {
+      error(res.error || "Failed to add technology");
+    }
+    setIsAddingTech(false);
   };
 
   // Manage Dynamic Challenges
@@ -325,17 +353,23 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400">Category</label>
-                <select 
+                <input 
                   name="category" 
                   value={formData.category} 
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none appearance-none"
-                >
-                  <option value="Web Development">Web Development</option>
-                  <option value="AI & Machine Learning">AI & Machine Learning</option>
-                  <option value="Data Engineering">Data Engineering</option>
-                  <option value="Mobile Development">Mobile Development</option>
-                </select>
+                  list="project-categories"
+                  placeholder="e.g. Web Development"
+                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all"
+                />
+                <datalist id="project-categories">
+                  <option value="Web Development" />
+                  <option value="AI & Machine Learning" />
+                  <option value="Data Engineering" />
+                  <option value="Mobile Development" />
+                  <option value="DevOps & Cloud" />
+                  <option value="Open Source" />
+                  <option value="Hackathon" />
+                </datalist>
               </div>
             </div>
           </section>
@@ -371,6 +405,28 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
           {/* Tech Stack */}
           <section className="p-6 bg-surface-dark rounded-2xl border border-white/5 space-y-4">
             <h2 className="font-bold text-white">Tech Stack</h2>
+            
+            {/* Add New Tech Input */}
+            <div className="flex gap-2 mb-2">
+              <input 
+                type="text" 
+                placeholder="Add new tech (e.g. Go, LLMs)" 
+                value={newTechName}
+                onChange={(e) => setNewTechName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddNewTech())}
+                className="flex-grow px-3 py-2 rounded-lg bg-background-dark border border-white/10 text-white text-sm outline-none focus:border-primary/50"
+              />
+              <button 
+                type="button" 
+                onClick={handleAddNewTech}
+                disabled={!newTechName.trim() || isAddingTech}
+                className="px-4 py-2 rounded-lg bg-primary/20 text-primary font-semibold hover:bg-primary/30 transition-all disabled:opacity-50 flex items-center gap-1"
+              >
+                {isAddingTech ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                Add
+              </button>
+            </div>
+
             <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto p-1">
               {allTechs.map((tech) => (
                 <button

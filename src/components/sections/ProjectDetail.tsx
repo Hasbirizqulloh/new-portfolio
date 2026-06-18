@@ -256,35 +256,45 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                         </div>
                     </div>
 
-                    <div className="bg-surface-dark rounded-xl p-6 border border-[#2f333a] flex flex-col gap-4">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Folder className="w-8 h-8 text-white" />
-                                <div>
-                                    <p className="text-white font-bold text-sm">hasbirizqulloh/{project.title.toLowerCase().replace(" ", "-")}</p>
-                                    <p className="text-xs text-gray-500">Public Repository</p>
+                    {project.sourceCodeUrl && (
+                        <div className="bg-surface-dark rounded-xl p-6 border border-[#2f333a] flex flex-col gap-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <Github className="w-8 h-8 text-white" />
+                                    <div>
+                                        <p className="text-white font-bold text-sm">
+                                            {project.sourceCodeUrl.includes('github.com/') 
+                                                ? project.sourceCodeUrl.split('github.com/')[1].replace(/\/$/, '') 
+                                                : project.title}
+                                        </p>
+                                        <p className="text-xs text-gray-500">Public Repository</p>
+                                    </div>
+                                </div>
+                                <a href={project.sourceCodeUrl} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink className="w-5 h-5 text-gray-500 hover:text-white transition-colors" />
+                                </a>
+                            </div>
+                            <div className="flex gap-4 text-xs text-text-muted">
+                                <div className="flex items-center gap-1">
+                                    <Star className="w-3.5 h-3.5" /> —
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <GitFork className="w-3.5 h-3.5" /> —
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <span className="w-2 h-2 rounded-full bg-green-500"></span> Active
                                 </div>
                             </div>
-                            <ExternalLink className="w-5 h-5 text-gray-500" />
+                            <a
+                                href={project.sourceCodeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full py-2 rounded border border-[#2f333a] text-center text-sm font-medium text-gray-300 hover:bg-white hover:text-background-dark transition-colors"
+                            >
+                                View Source Code
+                            </a>
                         </div>
-                        <div className="flex gap-4 text-xs text-text-muted">
-                            <div className="flex items-center gap-1">
-                                <Star className="w-3.5 h-3.5" /> 1.2k
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <GitFork className="w-3.5 h-3.5" /> 140
-                            </div>
-                            <div className="flex items-center gap-1">
-                                <span className="w-2 h-2 rounded-full bg-green-500"></span> Active
-                            </div>
-                        </div>
-                        <a
-                            href="#"
-                            className="w-full py-2 rounded border border-[#2f333a] text-center text-sm font-medium text-gray-300 hover:bg-white hover:text-background-dark transition-colors"
-                        >
-                            View Source Code
-                        </a>
-                    </div>
+                    )}
                 </aside>
             </div>
             {/* Diagram Pattern CSS */}

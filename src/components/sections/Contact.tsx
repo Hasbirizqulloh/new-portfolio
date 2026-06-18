@@ -57,14 +57,14 @@ export function Contact() {
                     </div>
 
                     <div className="flex flex-col gap-6 mt-4">
-                        <a href="mailto:hasbirizqulloh@example.com" className="flex items-start gap-4 group cursor-pointer w-fit">
+                        <a href="mailto:hasbirizqulloh95@gmail.com" className="flex items-start gap-4 group cursor-pointer w-fit">
                             <div className="w-12 h-12 rounded-xl bg-surface-dark border border-[#2f333a] group-hover:border-primary/50 group-hover:shadow-neon flex items-center justify-center text-primary transition-all">
                                 <Mail className="w-6 h-6" />
                             </div>
                             <div>
                                 <p className="text-sm text-text-muted mb-1 font-medium">Email Address</p>
                                 <p className="text-lg text-white font-semibold group-hover:text-primary transition-colors">
-                                    hasbirizqulloh@example.com
+                                    hasbirizqulloh95@gmail.com
                                 </p>
                             </div>
                         </a>
