@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { useToast } from "@/components/ui/Toast";
 import { ProjectFormData } from "@/types/admin";
+import { uploadImage } from "@/lib/supabaseClient";
 
 interface ProjectFormProps {
   initialData?: ProjectFormData;
@@ -31,6 +32,8 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
   const [newTechName, setNewTechName] = useState("");
   const [newTechCategory, setNewTechCategory] = useState("Frontend");
   const [isAddingTech, setIsAddingTech] = useState(false);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [isUploadingArchitecture, setIsUploadingArchitecture] = useState(false);
   
   // State Form
   const [formData, setFormData] = useState<ProjectFormData>({
@@ -93,6 +96,31 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
         ? prev.technologies.filter((t: string) => t !== id)
         : [...prev.technologies, id]
     }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'coverImageUrl' | 'architectureImageUrl') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      error("File size exceeds 5MB limit");
+      return;
+    }
+
+    if (field === 'coverImageUrl') setIsUploadingCover(true);
+    else setIsUploadingArchitecture(true);
+
+    try {
+      const url = await uploadImage(file, 'public-assets', 'projects');
+      setFormData(prev => ({ ...prev, [field]: url }));
+      success("Image uploaded successfully");
+    } catch (err) {
+      console.error(err);
+      error("Failed to upload image");
+    } finally {
+      if (field === 'coverImageUrl') setIsUploadingCover(false);
+      else setIsUploadingArchitecture(false);
+    }
   };
 
   const handleAddNewTech = async () => {
@@ -364,14 +392,14 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
                 className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all"
               />
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-400">Architecture Image URL</label>
-                <input 
-                  name="architectureImageUrl" 
-                  value={formData.architectureImageUrl} 
-                  onChange={handleChange} 
-                  placeholder="https://..."
-                  className="w-full px-4 py-3 rounded-lg bg-background-dark border border-white/10 text-white focus:ring-2 focus:ring-primary/50 outline-none transition-all font-mono text-sm"
-                />
+                <label className="text-sm font-medium text-gray-400">Architecture Image URL (Optional)</label>
+                <div className="flex gap-2">
+                  <input name="architectureImageUrl" value={formData.architectureImageUrl || ""} onChange={handleChange} className="w-full px-3 py-2 rounded bg-surface-dark border border-white/10 text-white text-sm" placeholder="URL or upload image..." />
+                  <label className="flex-shrink-0 bg-background border border-white/10 hover:border-white/20 px-3 py-2 rounded cursor-pointer transition-colors flex items-center justify-center min-w-[100px]">
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, 'architectureImageUrl')} disabled={isUploadingArchitecture} />
+                    {isUploadingArchitecture ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <span className="text-sm text-gray-300">Upload</span>}
+                  </label>
+                </div>
                 {formData.architectureImageUrl && (
                   <div className="mt-2 relative aspect-video rounded-lg overflow-hidden border border-white/10 bg-surface-dark">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -413,7 +441,13 @@ export function ProjectForm({ initialData }: ProjectFormProps) {
             <div className="space-y-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-400">Cover Image URL</label>
-                <input name="coverImageUrl" value={formData.coverImageUrl} onChange={handleChange} className="w-full px-3 py-2 rounded bg-background-dark border border-white/10 text-white text-sm" />
+                <div className="flex gap-2">
+                  <input name="coverImageUrl" value={formData.coverImageUrl} onChange={handleChange} className="w-full px-3 py-2 rounded bg-background-dark border border-white/10 text-white text-sm" placeholder="URL or upload image..." />
+                  <label className="flex-shrink-0 bg-surface-dark border border-white/10 hover:border-white/20 px-3 py-2 rounded cursor-pointer transition-colors flex items-center justify-center min-w-[100px]">
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageUpload(e, 'coverImageUrl')} disabled={isUploadingCover} />
+                    {isUploadingCover ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <span className="text-sm text-gray-300">Upload</span>}
+                  </label>
+                </div>
                 {formData.coverImageUrl && (
                   <div className="mt-2 relative aspect-video rounded-lg overflow-hidden border border-white/10 bg-surface-dark">
                     {/* eslint-disable-next-line @next/next/no-img-element */}

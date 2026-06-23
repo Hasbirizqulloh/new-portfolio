@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useToast } from "@/components/ui/Toast";
 import { BlogFormData } from "@/types/admin";
 import ReactMarkdown from "react-markdown";
+import { uploadImage } from "@/lib/supabaseClient";
 
 interface BlogFormProps {
   initialData?: BlogFormData;
@@ -19,6 +20,7 @@ export function BlogForm({ initialData }: BlogFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [isAutoSlug, setIsAutoSlug] = useState(!initialData?.slug);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
   
   const [formData, setFormData] = useState<BlogFormData>({
     id: initialData?.id || null,
@@ -68,6 +70,29 @@ export function BlogForm({ initialData }: BlogFormProps) {
       error(result.error || "Gagal menyimpan artikel.");
     }
     setIsLoading(false);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      error("File size exceeds 5MB limit");
+      return;
+    }
+
+    setIsUploadingCover(true);
+
+    try {
+      const url = await uploadImage(file, 'public-assets', 'blog');
+      setFormData(prev => ({ ...prev, coverImageUrl: url }));
+      success("Image uploaded successfully");
+    } catch (err) {
+      console.error(err);
+      error("Failed to upload image");
+    } finally {
+      setIsUploadingCover(false);
+    }
   };
 
   return (
@@ -152,7 +177,13 @@ export function BlogForm({ initialData }: BlogFormProps) {
 
           <section className="p-6 bg-surface-dark rounded-2xl border border-white/5 space-y-4">
             <div className="flex items-center gap-2 text-gray-400"><ImageIcon className="w-4 h-4" /> <span className="font-bold">Cover Image</span></div>
-            <input name="coverImageUrl" value={formData.coverImageUrl} onChange={handleChange} placeholder="Image URL..." className="w-full px-3 py-2 rounded bg-background-dark border border-white/10 text-white text-sm" />
+            <div className="flex gap-2">
+              <input name="coverImageUrl" value={formData.coverImageUrl} onChange={handleChange} placeholder="Image URL or upload..." className="w-full px-3 py-2 rounded bg-background-dark border border-white/10 text-white text-sm" />
+              <label className="flex-shrink-0 bg-surface-dark border border-white/10 hover:border-white/20 px-3 py-2 rounded cursor-pointer transition-colors flex items-center justify-center min-w-[100px]">
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={isUploadingCover} />
+                {isUploadingCover ? <Loader2 className="w-4 h-4 animate-spin text-blue-500" /> : <span className="text-sm text-gray-300">Upload</span>}
+              </label>
+            </div>
             {formData.coverImageUrl && (
               <div className="mt-2 relative aspect-video rounded-lg overflow-hidden border border-white/10 bg-surface-dark">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
